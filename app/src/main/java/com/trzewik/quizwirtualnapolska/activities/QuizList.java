@@ -12,16 +12,18 @@ import com.trzewik.quizwirtualnapolska.R;
 import com.trzewik.quizwirtualnapolska.adapters.QuizAdapter;
 import com.trzewik.quizwirtualnapolska.db.entity.Quiz;
 import com.trzewik.quizwirtualnapolska.logic.DataLoader;
+import com.trzewik.quizwirtualnapolska.logic.DatabaseController;
 
 import java.io.IOException;
 import java.util.List;
 
 public class QuizList extends AppCompatActivity {
     private static int START_INDEX = 0;
-    private static int MAX_RESULT = 5;
+    private static int MAX_RESULT = 40;
 
     private ListView listView;
     private DataLoader dataLoader = new DataLoader();
+    private DatabaseController databaseController = new DatabaseController();
 
 
     @Override
@@ -36,7 +38,7 @@ public class QuizList extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                List<Quiz> quizzes = dataLoader.getQuizListFromDb(App.get());
+                List<Quiz> quizzes = databaseController.getQuizListFromDb(App.get());
                 if (App.get().isForceUpdate() || quizzes.isEmpty()) {
                     try {
                         new DataLoader().retrieveQuizList(App.get(), getApplicationInfo().dataDir, startIndex, maxResult);
@@ -56,12 +58,12 @@ public class QuizList extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                QuizAdapter quizAdapter = new QuizAdapter(new DataLoader().getQuizListFromDb(App.get()), getApplicationContext());
+                QuizAdapter quizAdapter = new QuizAdapter(databaseController.getQuizListFromDb(App.get()), getApplicationContext());
                 listView.setAdapter(quizAdapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        List<Quiz> quizzes = dataLoader.getQuizListFromDb(App.get());
+                        List<Quiz> quizzes = databaseController.getQuizListFromDb(App.get());
                         Quiz quiz = quizzes.get(position);
                         Intent intent = new Intent(QuizList.this, QuizQuestion.class);
                         intent.putExtras(setBundle(quiz.getId()));

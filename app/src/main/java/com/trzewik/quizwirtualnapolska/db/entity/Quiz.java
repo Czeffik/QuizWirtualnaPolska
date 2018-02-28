@@ -2,6 +2,7 @@ package com.trzewik.quizwirtualnapolska.db.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 @Entity
@@ -27,6 +28,17 @@ public class Quiz {
 
     @ColumnInfo
     private String content;
+
+    public Quiz() {
+    }
+
+    @Ignore
+    public Quiz(long id, String title, String imagePath, String content) {
+        this.id = id;
+        this.title = title;
+        this.imagePath = imagePath;
+        this.content = content;
+    }
 
     public long getId() {
         return id;

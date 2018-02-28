@@ -5,23 +5,22 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class FileOperator {
-    private static String DIRECTORY_WITH_IMAGES = "/images";
     private DirectoryCreator directoryCreator = new DirectoryCreator();
     private ImageLoader imageLoader = new ImageLoader();
 
-    public String writeImageToFileAndGetPath(String directory, String imageAddress) {
+    public String writeImageToFileAndGetPath(String appDirectory, String filesDirectory, String imageAddress) {
         try {
-            writeImageToFile(directory, imageAddress);
+            writeImageToFile(appDirectory, filesDirectory, imageAddress);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return directory + DIRECTORY_WITH_IMAGES + imageLoader.getImageName(imageAddress);
+        return appDirectory + filesDirectory + imageLoader.getImageName(imageAddress);
     }
 
-    private void writeImageToFile(String directory, String imageAddress) throws IOException {
+    private void writeImageToFile(String appDirectory, String filesDirectory, String imageAddress) throws IOException {
         byte[] byteArray = imageLoader.getImageAsByteArray(imageLoader.getResizedImageAsBitmap(imageAddress));
-        directoryCreator.createDirectory(directory, DIRECTORY_WITH_IMAGES);
-        FileOutputStream fileOutputStream = new FileOutputStream(directory + DIRECTORY_WITH_IMAGES + imageLoader.getImageName(imageAddress));
+        directoryCreator.createDirectory(appDirectory, filesDirectory);
+        FileOutputStream fileOutputStream = new FileOutputStream(appDirectory + filesDirectory + imageLoader.getImageName(imageAddress));
         try {
             fileOutputStream.write(byteArray);
         } finally {

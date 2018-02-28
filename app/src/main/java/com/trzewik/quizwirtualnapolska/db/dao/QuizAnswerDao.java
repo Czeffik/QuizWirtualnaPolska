@@ -1,6 +1,7 @@
 package com.trzewik.quizwirtualnapolska.db.dao;
 
 
+import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
@@ -10,6 +11,7 @@ import com.trzewik.quizwirtualnapolska.db.entity.QuizAnswer;
 
 import java.util.List;
 
+@Dao
 public interface QuizAnswerDao {
     @Insert
     void insertAll(List<QuizAnswer> quizAnswers);
@@ -23,6 +25,6 @@ public interface QuizAnswerDao {
     @Delete
     void delete(QuizAnswer quizAnswer);
 
-    @Query("SELECT * FROM quiz_answer WHERE question_id = :questionId")
+    @Query("SELECT * FROM quizAnswer WHERE questionId = :questionId")
     List<QuizAnswer> getAnswersByQuestionId(long questionId);
 }

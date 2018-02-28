@@ -3,12 +3,13 @@ package com.trzewik.quizwirtualnapolska.db.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 @Entity
 public class QuizQuestion {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     private long id;
 
     @ColumnInfo
@@ -25,6 +26,18 @@ public class QuizQuestion {
 
     @ColumnInfo
     private int answered;
+
+    public QuizQuestion() {
+    }
+
+    @Ignore
+    public QuizQuestion(long quizId, String text, int order, int answered, long id) {
+        this.quizId = quizId;
+        this.text = text;
+        this.order = order;
+        this.answered = answered;
+        this.id = id;
+    }
 
     public long getId() {
         return id;

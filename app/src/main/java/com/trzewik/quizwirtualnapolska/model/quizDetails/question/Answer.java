@@ -8,7 +8,7 @@ public class Answer {
     private Image image;
     private int order;
     private String text;
-    private boolean isCorrect;
+    private int isCorrect;
 
     public Answer(JSONObject jsonObject) throws JSONException {
         if (jsonObject.has("image")) {
@@ -21,7 +21,7 @@ public class Answer {
             this.text = jsonObject.get("text").toString();
         }
         if (jsonObject.has("isCorrect")) {
-            this.isCorrect = jsonObject.getInt("isCorrect") == 1;
+            this.isCorrect = jsonObject.getInt("isCorrect");
         }
     }
 
@@ -37,7 +37,7 @@ public class Answer {
         return text;
     }
 
-    public boolean isCorrect() {
+    public int isCorrect() {
         return isCorrect;
     }
 }
