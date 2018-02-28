@@ -3,7 +3,6 @@ package com.trzewik.quizwirtualnapolska.adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,7 @@ import com.trzewik.quizwirtualnapolska.db.entity.Quiz;
 import java.util.List;
 
 
-public class QuizAdapter extends ArrayAdapter<Quiz> implements View.OnClickListener {
+public class QuizAdapter extends ArrayAdapter<Quiz> {
 
     Context mContext;
     private List<Quiz> quizzes;
@@ -26,21 +25,6 @@ public class QuizAdapter extends ArrayAdapter<Quiz> implements View.OnClickListe
         super(context, R.layout.row_item, quizzes);
         this.quizzes = quizzes;
         this.mContext = context;
-    }
-
-    @Override
-    public void onClick(View v) {
-        int position = (Integer) v.getTag();
-        Object object = getItem(position);
-        Quiz quiz = (Quiz) object;
-
-        switch (v.getId()) {
-            //TODO tutaj jest do wstawienia otwieranie nowego activity
-            case R.id.title:
-                Snackbar.make(v, "Release date " + quiz.getId(), Snackbar.LENGTH_LONG)
-                        .setAction("No action", null).show();
-                break;
-        }
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.trzewik.quizwirtualnapolska.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,7 +18,7 @@ import java.util.List;
 
 public class QuizList extends AppCompatActivity {
     private static int START_INDEX = 0;
-    private static int MAX_RESULT = 100;
+    private static int MAX_RESULT = 5;
 
     private ListView listView;
     private DataLoader dataLoader = new DataLoader();
@@ -63,13 +63,19 @@ public class QuizList extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         List<Quiz> quizzes = dataLoader.getQuizListFromDb(App.get());
                         Quiz quiz = quizzes.get(position);
-
-                        Snackbar.make(view, quiz.getId() + "\n" + quiz.getTitle(), Snackbar.LENGTH_LONG)
-                                .setAction("No action", null).show();
+                        Intent intent = new Intent(QuizList.this, QuizQuestion.class);
+                        intent.putExtras(setBundle(quiz.getId()));
+                        startActivity(intent);
                     }
                 });
             }
         });
+    }
+
+    private Bundle setBundle(long id) {
+        Bundle bundle = new Bundle();
+        bundle.putLong("id", id);
+        return bundle;
     }
 
 }

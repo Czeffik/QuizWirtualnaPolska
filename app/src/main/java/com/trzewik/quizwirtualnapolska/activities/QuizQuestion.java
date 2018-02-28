@@ -15,6 +15,8 @@ public class QuizQuestion extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_question);
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -26,6 +28,11 @@ public class QuizQuestion extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+    }
+
+    private long getId() {
+        Bundle bundle = getIntent().getExtras();
+        return bundle.getLong("id");
     }
 
 }
