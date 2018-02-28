@@ -32,6 +32,7 @@ public class QuizQuestion extends AppCompatActivity {
 
     private long getId() {
         Bundle bundle = getIntent().getExtras();
+        assert bundle != null;
         return bundle.getLong("id");
     }
 

@@ -25,6 +25,9 @@ public class Quiz {
     @ColumnInfo
     private String imagePath;
 
+    @ColumnInfo
+    private String content;
+
     public long getId() {
         return id;
     }
@@ -71,5 +74,13 @@ public class Quiz {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }
