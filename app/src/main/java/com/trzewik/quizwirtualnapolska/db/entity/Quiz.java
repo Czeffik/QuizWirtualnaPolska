@@ -22,8 +22,8 @@ public class Quiz {
     @ColumnInfo
     private int numberOfQuestions;
 
-    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
-    private byte[] image;
+    @ColumnInfo
+    private String imagePath;
 
     public long getId() {
         return id;
@@ -65,11 +65,11 @@ public class Quiz {
         this.numberOfQuestions = numberOfQuestions;
     }
 
-    public byte[] getImage() {
-        return image;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public void setImage(byte[] image) {
-        this.image = image;
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

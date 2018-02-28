@@ -15,13 +15,13 @@ import java.util.List;
 
 public class DataLoader {
     private ApiClient apiClient = new ApiClient();
-    private ImageLoader imageLoader = new ImageLoader();
+    private FileOperator fileOperator = new FileOperator();
 
     public List<Quiz> getQuizListFromDb(App app) {
         return app.getDatabase().quizDao().getAll();
     }
 
-    public void retrieveQuizList(App app, int startIndex, int maxResult) throws IOException {
+    public void retrieveQuizList(App app, String directory, int startIndex, int maxResult) throws IOException {
         List<Item> items = null;
         try {
             items = apiClient.getQuizzes(startIndex, maxResult).getItems();
@@ -35,7 +35,7 @@ public class DataLoader {
             quiz.setTitle(item.getTitle());
             quiz.setId(item.getId());
             System.out.println(item.getMainPhoto().getUrl());
-            quiz.setImage(imageLoader.getImageFromUrl(item.getMainPhoto().getUrl()));
+            quiz.setImagePath(fileOperator.writeImageToFileAndGetPath(directory, item.getMainPhoto().getUrl()));
             quizzes.add(quiz);
         }
 

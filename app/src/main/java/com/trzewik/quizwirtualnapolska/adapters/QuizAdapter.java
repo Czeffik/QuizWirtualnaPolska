@@ -1,4 +1,4 @@
-package com.trzewik.quizwirtualnapolska;
+package com.trzewik.quizwirtualnapolska.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,34 +11,33 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.trzewik.quizwirtualnapolska.R;
 import com.trzewik.quizwirtualnapolska.db.entity.Quiz;
-import com.trzewik.quizwirtualnapolska.model.quizDetails.question.Image;
 
 import java.util.List;
 
 
-public class QuizAdapter extends ArrayAdapter<Quiz> implements View.OnClickListener{
+public class QuizAdapter extends ArrayAdapter<Quiz> implements View.OnClickListener {
 
-    private List<Quiz> quizzes;
     Context mContext;
+    private List<Quiz> quizzes;
 
     public QuizAdapter(List<Quiz> quizzes, Context context) {
         super(context, R.layout.row_item, quizzes);
         this.quizzes = quizzes;
-        this.mContext=context;
+        this.mContext = context;
     }
 
     @Override
     public void onClick(View v) {
-        int position=(Integer) v.getTag();
-        Object object= getItem(position);
-        Quiz quiz=(Quiz)object;
+        int position = (Integer) v.getTag();
+        Object object = getItem(position);
+        Quiz quiz = (Quiz) object;
 
-        switch (v.getId())
-        {
-            //tutaj jest do wstawienia otwieranie nowego activity
+        switch (v.getId()) {
+            //TODO tutaj jest do wstawienia otwieranie nowego activity
             case R.id.title:
-                Snackbar.make(v, "Release date " +quiz.getId(), Snackbar.LENGTH_LONG)
+                Snackbar.make(v, "Release date " + quiz.getId(), Snackbar.LENGTH_LONG)
                         .setAction("No action", null).show();
                 break;
         }
@@ -67,10 +66,10 @@ public class QuizAdapter extends ArrayAdapter<Quiz> implements View.OnClickListe
 
         viewHolder.txtTitle.setText(quiz.getTitle());
         viewHolder.txtDescription.setText("description");
-        Bitmap bMap = BitmapFactory.decodeByteArray(quiz.getImage(), 0, quiz.getImage().length);
+
+        Bitmap bMap = BitmapFactory.decodeFile(quiz.getImagePath());
         viewHolder.image.setImageBitmap(bMap);
 
-        // Return the completed view to render on screen
         return convertView;
     }
 

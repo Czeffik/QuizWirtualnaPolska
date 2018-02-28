@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "c6a73c4225d607b83aeda7971d6cc17e",
+    "identityHash": "c5d40725040c3d28d480dd25f5d5a85a",
     "entities": [
       {
         "tableName": "Quiz",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `title` TEXT, `resolved` INTEGER NOT NULL, `lastResult` INTEGER NOT NULL, `numberOfQuestions` INTEGER NOT NULL, `image` BLOB, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `title` TEXT, `resolved` INTEGER NOT NULL, `lastResult` INTEGER NOT NULL, `numberOfQuestions` INTEGER NOT NULL, `imagePath` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -39,9 +39,9 @@
             "notNull": true
           },
           {
-            "fieldPath": "image",
-            "columnName": "image",
-            "affinity": "BLOB",
+            "fieldPath": "imagePath",
+            "columnName": "imagePath",
+            "affinity": "TEXT",
             "notNull": false
           }
         ],
@@ -57,7 +57,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"c6a73c4225d607b83aeda7971d6cc17e\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"c5d40725040c3d28d480dd25f5d5a85a\")"
     ]
   }
 }

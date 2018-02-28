@@ -1,4 +1,4 @@
-package com.trzewik.quizwirtualnapolska;
+package com.trzewik.quizwirtualnapolska.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.trzewik.quizwirtualnapolska.App;
+import com.trzewik.quizwirtualnapolska.R;
+import com.trzewik.quizwirtualnapolska.adapters.QuizAdapter;
 import com.trzewik.quizwirtualnapolska.db.entity.Quiz;
 import com.trzewik.quizwirtualnapolska.logic.DataLoader;
 
@@ -15,7 +18,7 @@ import java.util.List;
 
 public class QuizList extends AppCompatActivity {
     private static int START_INDEX = 0;
-    private static int MAX_RESULT = 10;
+    private static int MAX_RESULT = 100;
 
     private ListView listView;
     private DataLoader dataLoader = new DataLoader();
@@ -36,7 +39,7 @@ public class QuizList extends AppCompatActivity {
                 List<Quiz> quizzes = dataLoader.getQuizListFromDb(App.get());
                 if (App.get().isForceUpdate() || quizzes.isEmpty()) {
                     try {
-                        new DataLoader().retrieveQuizList(App.get(), startIndex, maxResult);
+                        new DataLoader().retrieveQuizList(App.get(), getApplicationInfo().dataDir, startIndex, maxResult);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -59,9 +62,9 @@ public class QuizList extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         List<Quiz> quizzes = dataLoader.getQuizListFromDb(App.get());
-                        Quiz quiz= quizzes.get(position);
+                        Quiz quiz = quizzes.get(position);
 
-                        Snackbar.make(view, quiz.getId()+"\n"+quiz.getTitle(), Snackbar.LENGTH_LONG)
+                        Snackbar.make(view, quiz.getId() + "\n" + quiz.getTitle(), Snackbar.LENGTH_LONG)
                                 .setAction("No action", null).show();
                     }
                 });
