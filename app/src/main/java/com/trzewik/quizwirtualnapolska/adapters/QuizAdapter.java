@@ -22,7 +22,7 @@ public class QuizAdapter extends ArrayAdapter<Quiz> {
     private List<Quiz> quizzes;
 
     public QuizAdapter(List<Quiz> quizzes, Context context) {
-        super(context, R.layout.row_item, quizzes);
+        super(context, R.layout.quiz_item, quizzes);
         this.quizzes = quizzes;
         this.mContext = context;
     }
@@ -37,7 +37,7 @@ public class QuizAdapter extends ArrayAdapter<Quiz> {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
 
-            convertView = inflater.inflate(R.layout.row_item, parent, false);
+            convertView = inflater.inflate(R.layout.quiz_item, parent, false);
 
             viewHolder.txtTitle = convertView.findViewById(R.id.title);
             viewHolder.txtDescription = convertView.findViewById(R.id.description);

@@ -19,7 +19,7 @@ import java.util.List;
 
 public class QuizList extends AppCompatActivity {
     private static int START_INDEX = 0;
-    private static int MAX_RESULT = 40;
+    private static int MAX_RESULT = 4;
 
     private ListView listView;
     private DataLoader dataLoader = new DataLoader();
@@ -38,10 +38,10 @@ public class QuizList extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                List<Quiz> quizzes = databaseController.getQuizListFromDb(App.get());
+                List<Quiz> quizzes = databaseController.getQuizListFromDb();
                 if (App.get().isForceUpdate() || quizzes.isEmpty()) {
                     try {
-                        new DataLoader().retrieveQuizList(App.get(), getApplicationInfo().dataDir, startIndex, maxResult);
+                        new DataLoader().retrieveQuizList(getApplicationInfo().dataDir, startIndex, maxResult);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -58,12 +58,12 @@ public class QuizList extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                QuizAdapter quizAdapter = new QuizAdapter(databaseController.getQuizListFromDb(App.get()), getApplicationContext());
+                QuizAdapter quizAdapter = new QuizAdapter(databaseController.getQuizListFromDb(), getApplicationContext());
                 listView.setAdapter(quizAdapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        List<Quiz> quizzes = databaseController.getQuizListFromDb(App.get());
+                        List<Quiz> quizzes = databaseController.getQuizListFromDb();
                         Quiz quiz = quizzes.get(position);
                         Intent intent = new Intent(QuizList.this, QuizQuestion.class);
                         intent.putExtras(setBundle(quiz.getId()));

@@ -1,7 +1,6 @@
 package com.trzewik.quizwirtualnapolska.logic;
 
 
-import com.trzewik.quizwirtualnapolska.App;
 import com.trzewik.quizwirtualnapolska.api.ApiClient;
 import com.trzewik.quizwirtualnapolska.db.entity.Quiz;
 import com.trzewik.quizwirtualnapolska.db.entity.QuizAnswer;
@@ -24,7 +23,7 @@ public class DataLoader {
     private FileOperator fileOperator = new FileOperator();
     private DatabaseController databaseController = new DatabaseController();
 
-    public void retrieveQuizList(App app, String appDirectory, int startIndex, int maxResult) throws IOException {
+    public void retrieveQuizList(String appDirectory, int startIndex, int maxResult) throws IOException {
         List<Item> items = null;
         try {
             items = apiClient.getQuizzes(startIndex, maxResult).getItems();
@@ -35,15 +34,15 @@ public class DataLoader {
 
         List<Quiz> quizzes = new ArrayList<>();
         for (Item item : items) {
-            retrieveQuizDetails(app, appDirectory, item.getId());
+            retrieveQuizDetails(appDirectory, item.getId());
             Quiz quiz = new Quiz(item.getId(), item.getTitle(), fileOperator.writeImageToFileAndGetPath(appDirectory, "/images", item.getMainPhoto().getUrl()), item.getContent());
             quizzes.add(quiz);
         }
 
-        databaseController.insertQuizListToDatabase(app, quizzes);
+        databaseController.insertQuizListToDatabase(quizzes);
     }
 
-    private void retrieveQuizDetails(App app, String appDirectory, long quizId) {
+    private void retrieveQuizDetails(String appDirectory, long quizId) {
         QuizDetails quizDetails = null;
         try {
             quizDetails = apiClient.getQuizDetails(quizId, 0);
@@ -56,14 +55,14 @@ public class DataLoader {
         List<QuizQuestion> quizQuestions = new ArrayList<>();
         for (Question question : questions) {
             long questionId = UUID.randomUUID().getMostSignificantBits();
-            retrieveQuizAnswers(app, appDirectory, question, questionId);
+            retrieveQuizAnswers(appDirectory, question, questionId);
             QuizQuestion quizQuestion = new QuizQuestion(quizId, question.getText(), question.getOrder(), 0, questionId);
             quizQuestions.add(quizQuestion);
         }
-        databaseController.insertQuizQuestionListToDatabase(app, quizQuestions);
+        databaseController.insertQuizQuestionListToDatabase(quizQuestions);
     }
 
-    private void retrieveQuizAnswers(App app, String appDirectory, Question question, long questionId) {
+    private void retrieveQuizAnswers(String appDirectory, Question question, long questionId) {
         List<Answer> answers = question.getAnswers();
         List<QuizAnswer> quizAnswers = new ArrayList<>();
         for (Answer answer : answers) {
@@ -74,7 +73,7 @@ public class DataLoader {
             QuizAnswer quizAnswer = new QuizAnswer(answer.getText(), answer.isCorrect(), pathToImage, questionId);
             quizAnswers.add(quizAnswer);
         }
-        databaseController.insertQuestionAnswerListToDatabase(app, quizAnswers);
+        databaseController.insertQuestionAnswerListToDatabase(quizAnswers);
     }
 
 }

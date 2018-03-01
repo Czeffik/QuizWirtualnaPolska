@@ -10,22 +10,34 @@ import java.util.List;
 
 public class DatabaseController {
 
-    public void insertQuizListToDatabase(App app, List<Quiz> quizzes){
-        app.getDatabase().quizDao().insertAll(quizzes);
-        app.setForceUpdate(false);
+    public void insertQuizListToDatabase(List<Quiz> quizzes){
+        App.get().getDatabase().quizDao().insertAll(quizzes);
+        App.get().setForceUpdate(false);
     }
 
-    public void insertQuizQuestionListToDatabase(App app, List<QuizQuestion> questions){
-        app.getDatabase().quizQuestionDao().insertAll(questions);
-        app.setForceUpdate(false);
+    public void insertQuizQuestionListToDatabase(List<QuizQuestion> questions){
+        App.get().getDatabase().quizQuestionDao().insertAll(questions);
+        App.get().setForceUpdate(false);
     }
 
-    public void insertQuestionAnswerListToDatabase(App app, List<QuizAnswer> quizAnswers){
-        app.getDatabase().quizAnswerDao().insertAll(quizAnswers);
-        app.setForceUpdate(false);
+    public void insertQuestionAnswerListToDatabase(List<QuizAnswer> quizAnswers){
+        App.get().getDatabase().quizAnswerDao().insertAll(quizAnswers);
+        App.get().setForceUpdate(false);
     }
 
-    public List<Quiz> getQuizListFromDb(App app) {
-        return app.getDatabase().quizDao().getAll();
+    public List<Quiz> getQuizListFromDb() {
+        return App.get().getDatabase().quizDao().getAll();
+    }
+
+    public List<QuizQuestion> getQuizQuestionsByQuizId(long id){
+        return App.get().getDatabase().quizQuestionDao().getQuestionsByQuizId(id);
+    }
+
+    public Quiz getQuizById(long id){
+        return App.get().getDatabase().quizDao().getQuizById(id);
+    }
+
+    public List<QuizAnswer> getQuizAnswerById(long id){
+        return App.get().getDatabase().quizAnswerDao().getAnswersByQuestionId(id);
     }
 }
