@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.trzewik.quizwirtualnapolska.R;
@@ -16,6 +17,7 @@ import com.trzewik.quizwirtualnapolska.adapters.AnswerListAdapter;
 import com.trzewik.quizwirtualnapolska.db.entity.QuestionAnswer;
 import com.trzewik.quizwirtualnapolska.db.entity.Quiz;
 import com.trzewik.quizwirtualnapolska.db.entity.QuizQuestion;
+import com.trzewik.quizwirtualnapolska.logic.AnswersCalculator;
 import com.trzewik.quizwirtualnapolska.logic.DatabaseController;
 import com.trzewik.quizwirtualnapolska.model.quizDetails.enums.QuestionType;
 
@@ -26,6 +28,7 @@ public class QuizQuestionActivity extends AppCompatActivity {
     private TextView questionView;
     private TextView titleView;
     private ImageView imageView;
+    private ProgressBar progressBar;
     private DatabaseController databaseController = new DatabaseController();
 
     @Override
@@ -37,26 +40,26 @@ public class QuizQuestionActivity extends AppCompatActivity {
         questionView = findViewById(R.id.text);
         titleView = findViewById(R.id.title);
         imageView = findViewById(R.id.image);
+        progressBar = findViewById(R.id.progressBar);
 
         populateView();
     }
 
-    private void populateView(){
-        long id = getId();
-        Quiz quiz = databaseController.getQuizById(id);
+    private void populateView() {
+        long quizId = getId();
+        Quiz quiz = databaseController.getQuizById(quizId);
 
-        List<QuizQuestion> quizQuestions = databaseController.getQuizQuestionsByQuizId(id);
-        if (quizQuestions.size()>0) {
+        List<QuizQuestion> quizQuestions = databaseController.getNotAnsweredQuizQuestionsByQuizId(quizId);
+        if (quizQuestions.size() > 0) {
             QuizQuestion quizQuestion = quizQuestions.get(0);
-            id = quizQuestion.getId();
-            List<QuestionAnswer> questionAnswers = databaseController.getQuizAnswerByQuestionId(id);
+            quizId = quizQuestion.getId();
+            List<QuestionAnswer> questionAnswers = databaseController.getQuizAnswerByQuestionId(quizId);
 
             populateTitle(quiz);
             populateQuestion(quizQuestion);
             populateAnswers(questionAnswers);
-        }
-
-        else{
+            populateProgressBar(quizId);
+        } else {
             Intent intent = new Intent(QuizQuestionActivity.this, QuizResultActivity.class);
             intent.putExtras(getIntent().getExtras());
             startActivity(intent);
@@ -64,7 +67,7 @@ public class QuizQuestionActivity extends AppCompatActivity {
         }
     }
 
-    private void populateTitle(final Quiz quiz){
+    private void populateTitle(final Quiz quiz) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -73,12 +76,12 @@ public class QuizQuestionActivity extends AppCompatActivity {
         });
     }
 
-    private void populateQuestion(final QuizQuestion quizQuestion){
+    private void populateQuestion(final QuizQuestion quizQuestion) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 questionView.setText(quizQuestion.getText());
-                if (quizQuestion.getQuestionType().equals(QuestionType.QUESTION_TEXT_IMAGE.toString())){
+                if (quizQuestion.getQuestionType().equals(QuestionType.QUESTION_TEXT_IMAGE.toString())) {
                     Bitmap bMap = BitmapFactory.decodeFile(quizQuestion.getPathToImage());
                     imageView.setImageBitmap(bMap);
                 }
@@ -90,7 +93,7 @@ public class QuizQuestionActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                listView.setAdapter( new AnswerListAdapter(questionAnswers, getApplicationContext()));
+                listView.setAdapter(new AnswerListAdapter(questionAnswers, getApplicationContext()));
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -100,6 +103,20 @@ public class QuizQuestionActivity extends AppCompatActivity {
 
                     }
                 });
+            }
+        });
+    }
+
+    private void populateProgressBar(final long quizId) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AnswersCalculator answersCalculator = new AnswersCalculator();
+                int allQuestions = answersCalculator.getNumberOfQuestions(quizId);
+                int notAnsweredQuestions = answersCalculator.getNumberOfNotAnsweredQuestions(quizId);
+                progressBar.setMax(allQuestions);
+                progressBar.setProgress(allQuestions - notAnsweredQuestions);
+                progressBar.setVisibility(View.VISIBLE);
             }
         });
     }

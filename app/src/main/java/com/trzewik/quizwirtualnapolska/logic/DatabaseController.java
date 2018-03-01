@@ -19,27 +19,12 @@ public class DatabaseController {
     private QuizQuestionDao questionTable = database.quizQuestionDao();
     private QuestionAnswerDao answerTable = database.questionAnswerDao();
 
-    public void insertQuizListToDatabase(List<Quiz> quizzes) {
-        quizTable.insertAll(quizzes);
-        app.setForceUpdate(false);
-    }
-
-    public void insertQuizQuestionListToDatabase(List<QuizQuestion> questions) {
-        questionTable.insertAll(questions);
-        app.setForceUpdate(false);
-    }
-
-    public void insertQuestionAnswerListToDatabase(List<QuestionAnswer> questionAnswers) {
-        answerTable.insertAll(questionAnswers);
-        app.setForceUpdate(false);
-    }
-
     public List<Quiz> getQuizListFromDb() {
         return quizTable.getAll();
     }
 
-    public List<QuizQuestion> getQuizQuestionsByQuizId(long id) {
-        return questionTable.getNotAnsweredQuestionsByQuizId(id);
+    public List<QuizQuestion> getNotAnsweredQuizQuestionsByQuizId(long quizId) {
+        return questionTable.getNotAnsweredQuestionsByQuizId(quizId);
     }
 
     public Quiz getQuizById(long id) {
@@ -48,14 +33,6 @@ public class DatabaseController {
 
     public List<QuestionAnswer> getQuizAnswerByQuestionId(long id) {
         return answerTable.getAnswersByQuestionId(id);
-    }
-
-    public QuizQuestion getQuizQuestionByQuestionId(long questionId) {
-        return questionTable.getQuizQuestionByQuestionId(questionId);
-    }
-
-    public QuestionAnswer getAnswerByAnswerId(long answerId) {
-        return answerTable.getQuestionAnswerByAnswerId(answerId);
     }
 
     public void setQuestionAnswer(long quizQuestionId, long answerId) {
@@ -71,6 +48,10 @@ public class DatabaseController {
         questionTable.update(quizQuestion);
     }
 
+    public void clearQuizAnswers(long quizId){
+        questionTable.clearQuizAnswersByQuizId(quizId);
+    }
+
     public List<QuizQuestion> getQuestionsWithCorrectAnswers(long quizId){
         return questionTable.getQuizQuestionsWithCorrectAnswersByQuizId(quizId);
     }
@@ -79,7 +60,26 @@ public class DatabaseController {
         return questionTable.getQuestionsByQuizId(quizId);
     }
 
-    public void clearQuizAnswers(long quizId){
-        questionTable.clearQuizAnswersByQuizId(quizId);
+    public QuizQuestion getQuizQuestionByQuestionId(long questionId) {
+        return questionTable.getQuizQuestionByQuestionId(questionId);
+    }
+
+    public QuestionAnswer getAnswerByAnswerId(long answerId) {
+        return answerTable.getQuestionAnswerByAnswerId(answerId);
+    }
+
+    public void insertQuizListToDatabase(List<Quiz> quizzes) {
+        quizTable.insertAll(quizzes);
+        app.setForceUpdate(false);
+    }
+
+    public void insertQuizQuestionListToDatabase(List<QuizQuestion> questions) {
+        questionTable.insertAll(questions);
+        app.setForceUpdate(false);
+    }
+
+    public void insertQuestionAnswerListToDatabase(List<QuestionAnswer> questionAnswers) {
+        answerTable.insertAll(questionAnswers);
+        app.setForceUpdate(false);
     }
 }

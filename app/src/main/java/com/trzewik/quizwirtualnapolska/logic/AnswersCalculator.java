@@ -21,4 +21,9 @@ public class AnswersCalculator {
         List<QuizQuestion> questions = databaseController.getQuestionsByQuizId(quizId);
         return questions.size();
     }
+
+    public int getNumberOfNotAnsweredQuestions(long quizId){
+        List<QuizQuestion> questions = databaseController.getNotAnsweredQuizQuestionsByQuizId(quizId);
+        return questions.size();
+    }
 }

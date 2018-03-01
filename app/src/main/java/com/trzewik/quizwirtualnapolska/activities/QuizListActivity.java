@@ -63,6 +63,7 @@ public class QuizListActivity extends AppCompatActivity {
                         Intent intent = new Intent(QuizListActivity.this, QuizQuestionActivity.class);
                         intent.putExtras(setBundle(quiz.getId()));
                         startActivity(intent);
+
                     }
                 });
             }
