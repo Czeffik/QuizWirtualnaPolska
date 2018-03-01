@@ -50,7 +50,7 @@ public class DataLoader {
             fetchQuizAnswers(appDirectory, question, questionId);
             String pathToImage = "";
             if (question.getType() == QuestionType.QUESTION_TEXT_IMAGE) {
-                pathToImage = fileOperator.writeAnswerImageToFileAndGetPath(appDirectory, "/questionImages", question.getImage().getUrl(), question.getImage().getMediaId());
+                pathToImage = fileOperator.writeQuestionImageToFileAndGetPath(appDirectory, "/questionImages", question.getImage().getUrl(), question.getImage().getMediaId());
             }
             QuizQuestion quizQuestion = new QuizQuestion(quizId, question.getText(), question.getOrder(), 0, questionId, question.getType(), question.getAnswer(), pathToImage);
             quizQuestions.add(quizQuestion);
