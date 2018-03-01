@@ -25,15 +25,20 @@ public class DataLoader {
         fetchQuizListQuizDetailsAndQuizAnswers(appDirectory, startIndex, maxResult);
     }
 
-    private void fetchQuizListQuizDetailsAndQuizAnswers(String appDirectory, int startIndex, int maxResult) {
+    private void fetchQuizListQuizDetailsAndQuizAnswers(final String appDirectory, int startIndex, int maxResult) {
         List<Item> items = apiClient.getQuizzes(startIndex, maxResult).getItems();
 
-        List<Quiz> quizzes = new ArrayList<>();
-        for (Item item : items) {
-            fetchQuizDetailsAndQuizAnswers(appDirectory, item.getId());
-            String pathToImage = fileOperator.writeQuizImageToFileAndGetPath(appDirectory, "/quizImages", item.getMainPhoto().getUrl(), item.getId());
-            Quiz quiz = new Quiz(item.getId(), item.getTitle(), pathToImage, item.getContent());
-            quizzes.add(quiz);
+        final List<Quiz> quizzes = new ArrayList<>();
+        for (final Item item : items) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    fetchQuizDetailsAndQuizAnswers(appDirectory, item.getId());
+                    String pathToImage = fileOperator.writeQuizImageToFileAndGetPath(appDirectory, "/quizImages", item.getMainPhoto().getUrl(), item.getId());
+                    Quiz quiz = new Quiz(item.getId(), item.getTitle(), pathToImage, item.getContent());
+                    quizzes.add(quiz);
+                }
+            }).start();
         }
 
         databaseController.insertQuizListToDatabase(quizzes);
