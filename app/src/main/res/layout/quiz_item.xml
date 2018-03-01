@@ -52,6 +52,7 @@
         app:layout_constraintBottom_toTopOf="@+id/description"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.55" />
+        app:layout_constraintVertical_bias="0.55"
+        android:layout_marginLeft="5dp" />
 
 </android.support.constraint.ConstraintLayout>

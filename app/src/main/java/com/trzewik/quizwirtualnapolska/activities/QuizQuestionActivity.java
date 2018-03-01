@@ -2,19 +2,20 @@ package com.trzewik.quizwirtualnapolska.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.trzewik.quizwirtualnapolska.R;
-import com.trzewik.quizwirtualnapolska.adapters.QuestionAnswerAdapter;
+import com.trzewik.quizwirtualnapolska.adapters.QuestionAnswerListAdapter;
 import com.trzewik.quizwirtualnapolska.db.entity.Quiz;
 import com.trzewik.quizwirtualnapolska.db.entity.QuizAnswer;
+import com.trzewik.quizwirtualnapolska.db.entity.QuizQuestion;
 import com.trzewik.quizwirtualnapolska.logic.DatabaseController;
 
 import java.util.List;
 
-public class QuizQuestion extends AppCompatActivity {
-    private RecyclerView recyclerView;
+public class QuizQuestionActivity extends AppCompatActivity {
+    private ListView listView;
     private TextView questionView;
     private TextView titleView;
     private DatabaseController databaseController = new DatabaseController();
@@ -24,7 +25,7 @@ public class QuizQuestion extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_question);
 
-        recyclerView = findViewById(R.id.recycler);
+        listView = findViewById(R.id.list);
         questionView = findViewById(R.id.text);
         titleView = findViewById(R.id.title);
 
@@ -35,8 +36,8 @@ public class QuizQuestion extends AppCompatActivity {
         long id = getId();
         Quiz quiz = databaseController.getQuizById(id);
         populateTitle(quiz);
-        List<com.trzewik.quizwirtualnapolska.db.entity.QuizQuestion> quizQuestions = databaseController.getQuizQuestionsByQuizId(id);
-        com.trzewik.quizwirtualnapolska.db.entity.QuizQuestion quizQuestion = quizQuestions.get(0);
+        List<QuizQuestion> quizQuestions = databaseController.getQuizQuestionsByQuizId(id);
+        QuizQuestion quizQuestion = quizQuestions.get(0);
         populateQuestion(quizQuestion);
         id = quizQuestion.getId();
         List<QuizAnswer> quizAnswers = databaseController.getQuizAnswerById(id);
@@ -53,7 +54,7 @@ public class QuizQuestion extends AppCompatActivity {
         });
     }
 
-    private void populateQuestion(final com.trzewik.quizwirtualnapolska.db.entity.QuizQuestion quizQuestion){
+    private void populateQuestion(final QuizQuestion quizQuestion){
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -66,7 +67,7 @@ public class QuizQuestion extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                recyclerView.setAdapter(new QuestionAnswerAdapter(quizAnswers));
+                listView.setAdapter( new QuestionAnswerListAdapter(quizAnswers, getApplicationContext()));
             }
         });
     }

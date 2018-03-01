@@ -1,5 +1,7 @@
 package com.trzewik.quizwirtualnapolska.model.quizDetails;
 
+import com.trzewik.quizwirtualnapolska.model.quizDetails.enums.AnswerType;
+import com.trzewik.quizwirtualnapolska.model.quizDetails.enums.QuestionType;
 import com.trzewik.quizwirtualnapolska.model.quizDetails.question.Answer;
 import com.trzewik.quizwirtualnapolska.model.quizDetails.question.Image;
 
@@ -15,8 +17,8 @@ public class Question {
     private Image image;
     private List<Answer> answers;
     private String text;
-    private String answer;
-    private String type;
+    private AnswerType answer;
+    private QuestionType type;
     private int order;
 
     public Question(JSONObject jsonObject) throws JSONException {
@@ -36,10 +38,10 @@ public class Question {
             this.text = jsonObject.getString("text");
         }
         if (jsonObject.has("answer")) {
-            this.answer = jsonObject.getString("answer");
+            this.answer = AnswerType.valueOf(jsonObject.getString("answer"));
         }
         if (jsonObject.has("type")) {
-            this.type = jsonObject.getString("type");
+            this.type = QuestionType.valueOf(jsonObject.getString("type"));
         }
         if (jsonObject.has("order")) {
             this.order = jsonObject.getInt("order");
@@ -58,11 +60,11 @@ public class Question {
         return text;
     }
 
-    public String getAnswer() {
+    public AnswerType getAnswer() {
         return answer;
     }
 
-    public String getType() {
+    public QuestionType getType() {
         return type;
     }
 

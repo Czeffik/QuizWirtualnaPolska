@@ -7,13 +7,11 @@ import com.trzewik.quizwirtualnapolska.db.entity.QuizAnswer;
 import com.trzewik.quizwirtualnapolska.db.entity.QuizQuestion;
 import com.trzewik.quizwirtualnapolska.model.quizDetails.Question;
 import com.trzewik.quizwirtualnapolska.model.quizDetails.QuizDetails;
+import com.trzewik.quizwirtualnapolska.model.quizDetails.enums.AnswerType;
+import com.trzewik.quizwirtualnapolska.model.quizDetails.enums.QuestionType;
 import com.trzewik.quizwirtualnapolska.model.quizDetails.question.Answer;
 import com.trzewik.quizwirtualnapolska.model.quizList.Item;
 
-import org.json.JSONException;
-
-import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -23,52 +21,50 @@ public class DataLoader {
     private FileOperator fileOperator = new FileOperator();
     private DatabaseController databaseController = new DatabaseController();
 
-    public void retrieveQuizList(String appDirectory, int startIndex, int maxResult) throws IOException {
-        List<Item> items = null;
-        try {
-            items = apiClient.getQuizzes(startIndex, maxResult).getItems();
-        } catch (JSONException | ParseException | IOException e) {
-            e.printStackTrace();
-        }
-        assert items != null;
+    public void retrieveData(String appDirectory, int startIndex, int maxResult) {
+        fetchQuizListQuizDetailsAndQuizAnswers(appDirectory, startIndex, maxResult);
+    }
+
+    private void fetchQuizListQuizDetailsAndQuizAnswers(String appDirectory, int startIndex, int maxResult) {
+        List<Item> items = apiClient.getQuizzes(startIndex, maxResult).getItems();
 
         List<Quiz> quizzes = new ArrayList<>();
         for (Item item : items) {
-            retrieveQuizDetails(appDirectory, item.getId());
-            Quiz quiz = new Quiz(item.getId(), item.getTitle(), fileOperator.writeImageToFileAndGetPath(appDirectory, "/images", item.getMainPhoto().getUrl()), item.getContent());
+            fetchQuizDetailsAndQuizAnswers(appDirectory, item.getId());
+            String pathToImage = fileOperator.writeQuizImageToFileAndGetPath(appDirectory, "/quizImages", item.getMainPhoto().getUrl(), item.getId());
+            Quiz quiz = new Quiz(item.getId(), item.getTitle(), pathToImage, item.getContent());
             quizzes.add(quiz);
         }
 
         databaseController.insertQuizListToDatabase(quizzes);
     }
 
-    private void retrieveQuizDetails(String appDirectory, long quizId) {
-        QuizDetails quizDetails = null;
-        try {
-            quizDetails = apiClient.getQuizDetails(quizId, 0);
-        } catch (JSONException | ParseException | IOException e) {
-            e.printStackTrace();
-        }
-        assert quizDetails != null;
+    private void fetchQuizDetailsAndQuizAnswers(String appDirectory, long quizId) {
+        QuizDetails quizDetails = apiClient.getQuizDetails(quizId, 0);
+
         List<Question> questions = quizDetails.getQuestions();
 
         List<QuizQuestion> quizQuestions = new ArrayList<>();
         for (Question question : questions) {
             long questionId = UUID.randomUUID().getMostSignificantBits();
-            retrieveQuizAnswers(appDirectory, question, questionId);
-            QuizQuestion quizQuestion = new QuizQuestion(quizId, question.getText(), question.getOrder(), 0, questionId);
+            fetchQuizAnswers(appDirectory, question, questionId);
+            String pathToImage = "";
+            if (question.getType() == QuestionType.QUESTION_TEXT_IMAGE) {
+                pathToImage = fileOperator.writeAnswerImageToFileAndGetPath(appDirectory, "/questionImages", question.getImage().getUrl(), question.getImage().getMediaId());
+            }
+            QuizQuestion quizQuestion = new QuizQuestion(quizId, question.getText(), question.getOrder(), 0, questionId, question.getType(), question.getAnswer(), pathToImage);
             quizQuestions.add(quizQuestion);
         }
         databaseController.insertQuizQuestionListToDatabase(quizQuestions);
     }
 
-    private void retrieveQuizAnswers(String appDirectory, Question question, long questionId) {
+    private void fetchQuizAnswers(String appDirectory, Question question, long questionId) {
         List<Answer> answers = question.getAnswers();
         List<QuizAnswer> quizAnswers = new ArrayList<>();
         for (Answer answer : answers) {
-            String pathToImage = null;
-            if (answer.getImage().getUrl().length() > 0) {
-                pathToImage = fileOperator.writeImageToFileAndGetPath(appDirectory, "/answers", answer.getImage().getUrl());
+            String pathToImage = "";
+            if (question.getAnswer() == AnswerType.ANSWER_IMAGE) {
+                pathToImage = fileOperator.writeAnswerImageToFileAndGetPath(appDirectory, "/answerImages", answer.getImage().getUrl(), answer.getImage().getMediaId());
             }
             QuizAnswer quizAnswer = new QuizAnswer(answer.getText(), answer.isCorrect(), pathToImage, questionId);
             quizAnswers.add(quizAnswer);

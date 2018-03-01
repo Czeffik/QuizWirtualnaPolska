@@ -14,12 +14,11 @@ import com.trzewik.quizwirtualnapolska.db.entity.Quiz;
 import com.trzewik.quizwirtualnapolska.logic.DataLoader;
 import com.trzewik.quizwirtualnapolska.logic.DatabaseController;
 
-import java.io.IOException;
 import java.util.List;
 
-public class QuizList extends AppCompatActivity {
+public class QuizListActivity extends AppCompatActivity {
     private static int START_INDEX = 0;
-    private static int MAX_RESULT = 4;
+    private static int MAX_RESULT = 50;
 
     private ListView listView;
     private DataLoader dataLoader = new DataLoader();
@@ -40,11 +39,7 @@ public class QuizList extends AppCompatActivity {
             public void run() {
                 List<Quiz> quizzes = databaseController.getQuizListFromDb();
                 if (App.get().isForceUpdate() || quizzes.isEmpty()) {
-                    try {
-                        new DataLoader().retrieveQuizList(getApplicationInfo().dataDir, startIndex, maxResult);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    new DataLoader().retrieveData(getApplicationInfo().dataDir, startIndex, maxResult);
                     populateQuizList();
                 } else {
                     populateQuizList();
@@ -65,7 +60,7 @@ public class QuizList extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         List<Quiz> quizzes = databaseController.getQuizListFromDb();
                         Quiz quiz = quizzes.get(position);
-                        Intent intent = new Intent(QuizList.this, QuizQuestion.class);
+                        Intent intent = new Intent(QuizListActivity.this, QuizQuestionActivity.class);
                         intent.putExtras(setBundle(quiz.getId()));
                         startActivity(intent);
                     }

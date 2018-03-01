@@ -11,12 +11,10 @@ import java.io.InputStream;
 import java.net.URL;
 
 public class ImageLoader {
-    private static int TARGET_WIDTH = 250;
-    private static int TARGET_HEIGHT = 250;
     private static int QUALITY = 100;
     private static Bitmap.CompressFormat COMPRESS_FORMAT = Bitmap.CompressFormat.JPEG;
 
-    public Bitmap getResizedImageAsBitmap(String imageAddress) {
+    public Bitmap getResizedImageAsBitmap(String imageAddress, int targetWidth, int targetHeight) {
         byte[] byteArray = null;
         try {
             byteArray = getImageByteArray(imageAddress);
@@ -24,7 +22,7 @@ public class ImageLoader {
             e.printStackTrace();
         }
         Bitmap bitmap = getImageAsBitmap(byteArray);
-        Bitmap scaled = Bitmap.createScaledBitmap(bitmap, TARGET_WIDTH, TARGET_HEIGHT, true);
+        Bitmap scaled = Bitmap.createScaledBitmap(bitmap, targetWidth, targetHeight, true);
         bitmap.recycle();
         return scaled;
     }

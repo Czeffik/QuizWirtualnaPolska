@@ -20,12 +20,24 @@ public class ApiClient {
     final static private Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     private OkHttpClient client = new OkHttpClient();
 
-    public Quizzes getQuizzes(int startIndex, int maxResult) throws JSONException, ParseException, IOException {
-        return new Quizzes(getQuizListWithCounter(startIndex, maxResult));
+    public Quizzes getQuizzes(int startIndex, int maxResult) {
+        Quizzes quizzes = null;
+        try {
+            quizzes =  new Quizzes(getQuizListWithCounter(startIndex, maxResult));
+        } catch (JSONException|ParseException|IOException e) {
+            e.printStackTrace();
+        }
+        return quizzes;
     }
 
-    public QuizDetails getQuizDetails(long quizId, int startIndex) throws JSONException, ParseException, IOException {
-        return new QuizDetails(getQuizDetailsJsonObject(quizId, startIndex));
+    public QuizDetails getQuizDetails(long quizId, int startIndex)  {
+        QuizDetails quizDetails = null;
+        try {
+            quizDetails =  new QuizDetails(getQuizDetailsJsonObject(quizId, startIndex));
+        } catch (JSONException|ParseException|IOException e) {
+            e.printStackTrace();
+        }
+        return quizDetails;
     }
 
     private JSONObject getQuizListWithCounter(int startIndex, int maxResult) throws IOException, JSONException {

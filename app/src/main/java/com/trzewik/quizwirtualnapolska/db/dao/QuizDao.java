@@ -25,12 +25,6 @@ public interface QuizDao {
     @Query("SELECT * FROM quiz")
     List<Quiz> getAll();
 
-    @Query("SELECT * FROM quiz WHERE resolved = 0")
-    List<Quiz> getNotResolved();
-
-    @Query("SELECT * FROM quiz WHERE resolved = 1")
-    List<Quiz> getResolved();
-
     @Query("SELECT * FROM quiz WHERE id = :id")
     Quiz getQuizById(long id);
 
