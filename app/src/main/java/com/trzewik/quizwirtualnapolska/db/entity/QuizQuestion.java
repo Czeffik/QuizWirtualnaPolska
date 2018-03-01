@@ -6,7 +6,6 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
-import com.trzewik.quizwirtualnapolska.model.quizDetails.enums.AnswerType;
 import com.trzewik.quizwirtualnapolska.model.quizDetails.enums.QuestionType;
 
 @Entity
@@ -34,22 +33,18 @@ public class QuizQuestion {
     private String questionType;
 
     @ColumnInfo
-    private String answerType;
-
-    @ColumnInfo
     private String pathToImage;
 
     public QuizQuestion() {
     }
 
     @Ignore
-    public QuizQuestion(long quizId, String text, int order, int answered, long id, QuestionType questionType, AnswerType answerType, String pathToImage) {
+    public QuizQuestion(long quizId, String text, int order, int answered, long id, QuestionType questionType, String pathToImage) {
         this.quizId = quizId;
         this.text = text;
         this.order = order;
         this.answered = answered;
         this.id = id;
-        this.answerType = String.valueOf(answerType);
         this.questionType = String.valueOf(questionType);
         this.pathToImage = pathToImage;
     }
@@ -108,14 +103,6 @@ public class QuizQuestion {
 
     public void setQuestionType(String questionType) {
         this.questionType = questionType;
-    }
-
-    public String getAnswerType() {
-        return answerType;
-    }
-
-    public void setAnswerType(String answerType) {
-        this.answerType = answerType;
     }
 
     public String getPathToImage() {

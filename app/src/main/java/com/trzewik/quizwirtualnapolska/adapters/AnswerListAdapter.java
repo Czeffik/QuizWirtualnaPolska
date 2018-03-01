@@ -11,20 +11,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.trzewik.quizwirtualnapolska.R;
-import com.trzewik.quizwirtualnapolska.db.entity.QuizAnswer;
+import com.trzewik.quizwirtualnapolska.db.entity.QuestionAnswer;
+import com.trzewik.quizwirtualnapolska.model.quizDetails.enums.AnswerType;
 
 import java.util.List;
 
-/**
- * Created by trzewik on 01.03.2018.
- */
 
-public class QuestionAnswerListAdapter extends ArrayAdapter<QuizAnswer> {
+public class AnswerListAdapter extends ArrayAdapter<QuestionAnswer> {
 
     Context mContext;
-    private List<QuizAnswer> answers;
+    private List<QuestionAnswer> answers;
 
-    public QuestionAnswerListAdapter(List<QuizAnswer> answers, Context context) {
+    public AnswerListAdapter(List<QuestionAnswer> answers, Context context) {
         super(context, R.layout.quiz_item, answers);
         this.answers = answers;
         this.mContext = context;
@@ -32,7 +30,7 @@ public class QuestionAnswerListAdapter extends ArrayAdapter<QuizAnswer> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        QuizAnswer answer = getItem(position);
+        QuestionAnswer answer = getItem(position);
         ViewHolder viewHolder;
 
         if (convertView == null) {
@@ -40,11 +38,27 @@ public class QuestionAnswerListAdapter extends ArrayAdapter<QuizAnswer> {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
 
-            if (answer.getImagePath().length()>0){
+            if (answer.getAnswerType().equals(AnswerType.ANSWER_IMAGE.toString())){
                 convertView = inflater.inflate(R.layout.image_answer_item, parent, false);
 
                 viewHolder.image = convertView.findViewById(R.id.image);
                 viewHolder.text = null;
+
+                convertView.setTag(viewHolder);
+            }
+            else if (answer.getAnswerType().equals(AnswerType.ANSWER_TEXT.toString())){
+                convertView = inflater.inflate(R.layout.text_answer_item, parent, false);
+
+                viewHolder.text = convertView.findViewById(R.id.text);
+                viewHolder.image = null;
+
+                convertView.setTag(viewHolder);
+            }
+            else if (answer.getAnswerType().equals(AnswerType.ANSWER_TEXT_IMAGE.toString())){
+                convertView = inflater.inflate(R.layout.text_image_answer_item, parent, false);
+
+                viewHolder.text = convertView.findViewById(R.id.text);
+                viewHolder.image = convertView.findViewById(R.id.image);
 
                 convertView.setTag(viewHolder);
             }
@@ -61,12 +75,20 @@ public class QuestionAnswerListAdapter extends ArrayAdapter<QuizAnswer> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        if (viewHolder.text!=null) {
+        if (answer.getAnswerType().equals(AnswerType.ANSWER_TEXT.toString())) {
             viewHolder.text.setText(answer.getText());
         }
-        if (viewHolder.image!=null){
+        else if (answer.getAnswerType().equals(AnswerType.ANSWER_IMAGE.toString())){
             Bitmap bMap = BitmapFactory.decodeFile(answer.getImagePath());
             viewHolder.image.setImageBitmap(bMap);
+        }
+        else if (answer.getAnswerType().equals(AnswerType.ANSWER_TEXT_IMAGE.toString())){
+            viewHolder.text.setText(answer.getText());
+            Bitmap bMap = BitmapFactory.decodeFile(answer.getImagePath());
+            viewHolder.image.setImageBitmap(bMap);
+        }
+        else{
+            viewHolder.text.setText(answer.getText());
         }
 
         return convertView;

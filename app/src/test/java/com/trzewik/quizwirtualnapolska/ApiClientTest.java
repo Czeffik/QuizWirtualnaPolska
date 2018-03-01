@@ -38,17 +38,17 @@ public class ApiClientTest {
         assert quizId == quizDetails.getId();
     }
 
-    @Test
-    public void shouldTestAll() throws ParseException, IOException, JSONException, InterruptedException {
-        int startIndex = 0;
-        int maxResult = 1000;
-        long quizId;
-
-        Quizzes quizzes = apiClient.getQuizzes(startIndex, maxResult);
-        for (int i = startIndex; i<maxResult; i++) {
-            quizId = quizzes.getItems().get(i).getId();
-            QuizDetails quizDetails = apiClient.getQuizDetails(quizId, startIndex);
-            Thread.sleep(200);
-        }
-    }
+//    @Test
+//    public void shouldTestAll() throws ParseException, IOException, JSONException, InterruptedException {
+//        int startIndex = 0;
+//        int maxResult = 1000;
+//        long quizId;
+//
+//        Quizzes quizzes = apiClient.getQuizzes(startIndex, maxResult);
+//        for (int i = startIndex; i<maxResult; i++) {
+//            quizId = quizzes.getItems().get(i).getId();
+//            QuizDetails quizDetails = apiClient.getQuizDetails(quizId, startIndex);
+////            Thread.sleep(200);
+//        }
+//    }
 }

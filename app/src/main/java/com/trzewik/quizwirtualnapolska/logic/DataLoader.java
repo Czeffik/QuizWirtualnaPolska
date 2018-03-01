@@ -3,7 +3,7 @@ package com.trzewik.quizwirtualnapolska.logic;
 
 import com.trzewik.quizwirtualnapolska.api.ApiClient;
 import com.trzewik.quizwirtualnapolska.db.entity.Quiz;
-import com.trzewik.quizwirtualnapolska.db.entity.QuizAnswer;
+import com.trzewik.quizwirtualnapolska.db.entity.QuestionAnswer;
 import com.trzewik.quizwirtualnapolska.db.entity.QuizQuestion;
 import com.trzewik.quizwirtualnapolska.model.quizDetails.Question;
 import com.trzewik.quizwirtualnapolska.model.quizDetails.QuizDetails;
@@ -52,7 +52,7 @@ public class DataLoader {
             if (question.getType() == QuestionType.QUESTION_TEXT_IMAGE) {
                 pathToImage = fileOperator.writeQuestionImageToFileAndGetPath(appDirectory, "/questionImages", question.getImage().getUrl(), question.getImage().getMediaId());
             }
-            QuizQuestion quizQuestion = new QuizQuestion(quizId, question.getText(), question.getOrder(), 0, questionId, question.getType(), question.getAnswer(), pathToImage);
+            QuizQuestion quizQuestion = new QuizQuestion(quizId, question.getText(), question.getOrder(), 0, questionId, question.getType(), pathToImage);
             quizQuestions.add(quizQuestion);
         }
         databaseController.insertQuizQuestionListToDatabase(quizQuestions);
@@ -60,16 +60,16 @@ public class DataLoader {
 
     private void fetchQuizAnswers(String appDirectory, Question question, long questionId) {
         List<Answer> answers = question.getAnswers();
-        List<QuizAnswer> quizAnswers = new ArrayList<>();
+        List<QuestionAnswer> questionAnswers = new ArrayList<>();
         for (Answer answer : answers) {
             String pathToImage = "";
             if (question.getAnswer() == AnswerType.ANSWER_IMAGE) {
                 pathToImage = fileOperator.writeAnswerImageToFileAndGetPath(appDirectory, "/answerImages", answer.getImage().getUrl(), answer.getImage().getMediaId());
             }
-            QuizAnswer quizAnswer = new QuizAnswer(answer.getText(), answer.isCorrect(), pathToImage, questionId);
-            quizAnswers.add(quizAnswer);
+            QuestionAnswer questionAnswer = new QuestionAnswer(answer.getText(), answer.isCorrect(), pathToImage, questionId, question.getAnswer());
+            questionAnswers.add(questionAnswer);
         }
-        databaseController.insertQuestionAnswerListToDatabase(quizAnswers);
+        databaseController.insertQuestionAnswerListToDatabase(questionAnswers);
     }
 
 }

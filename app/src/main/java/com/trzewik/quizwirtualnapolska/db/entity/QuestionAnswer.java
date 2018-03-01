@@ -6,11 +6,10 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
-//(foreignKeys = {
-//@ForeignKey(entity = QuizQuestion.class, parentColumns = "id", childColumns ="question_id" ),
-//        })
+import com.trzewik.quizwirtualnapolska.model.quizDetails.enums.AnswerType;
+
 @Entity
-public class QuizAnswer {
+public class QuestionAnswer {
     @PrimaryKey(autoGenerate = true)
     private long id;
 
@@ -26,15 +25,19 @@ public class QuizAnswer {
     @ColumnInfo
     private String imagePath;
 
-    public QuizAnswer() {
+    @ColumnInfo
+    private String answerType;
+
+    public QuestionAnswer() {
     }
 
     @Ignore
-    public QuizAnswer(String text, int isCorrect, String imagePath, long questionId) {
+    public QuestionAnswer(String text, int isCorrect, String imagePath, long questionId, AnswerType answerType) {
         this.text = text;
         this.isCorrect = isCorrect;
         this.imagePath = imagePath;
         this.questionId = questionId;
+        this.answerType = String.valueOf(answerType);
     }
 
     public long getId() {
@@ -75,5 +78,13 @@ public class QuizAnswer {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public String getAnswerType() {
+        return answerType;
+    }
+
+    public void setAnswerType(String answerType) {
+        this.answerType = answerType;
     }
 }
