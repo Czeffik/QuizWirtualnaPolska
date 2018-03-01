@@ -31,6 +31,12 @@ public interface QuizQuestionDao {
     @Query("SELECT * FROM quizQuestion WHERE quizId = :quizId AND answered = 0")
     List<QuizQuestion> getNotAnsweredQuestionsByQuizId(long quizId);
 
-    @Query("SELECT * FROM quizquestion WHERE id = :questionId")
+    @Query("SELECT * FROM quizQuestion WHERE id = :questionId")
     QuizQuestion getQuizQuestionByQuestionId(long questionId);
+
+    @Query("SELECT * FROM quizQuestion WHERE quizId = :quizId AND correctAnswer = 1")
+    List<QuizQuestion> getQuizQuestionsWithCorrectAnswersByQuizId(long quizId);
+
+    @Query("UPDATE quizQuestion SET answered = 0, correctAnswer = 0 WHERE quizId = :quizId")
+    void clearQuizAnswersByQuizId(long quizId);
 }

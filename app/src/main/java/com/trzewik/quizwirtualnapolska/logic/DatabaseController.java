@@ -70,4 +70,16 @@ public class DatabaseController {
         }
         questionTable.update(quizQuestion);
     }
+
+    public List<QuizQuestion> getQuestionsWithCorrectAnswers(long quizId){
+        return questionTable.getQuizQuestionsWithCorrectAnswersByQuizId(quizId);
+    }
+
+    public List<QuizQuestion> getQuestionsByQuizId(long quizId){
+        return questionTable.getQuestionsByQuizId(quizId);
+    }
+
+    public void clearQuizAnswers(long quizId){
+        questionTable.clearQuizAnswersByQuizId(quizId);
+    }
 }

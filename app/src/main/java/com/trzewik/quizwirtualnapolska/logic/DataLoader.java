@@ -50,7 +50,7 @@ public class DataLoader {
             fetchQuizAnswers(appDirectory, question, questionId);
             String pathToImage = "";
             if (question.getType() == QuestionType.QUESTION_TEXT_IMAGE) {
-                pathToImage = fileOperator.writeQuestionImageToFileAndGetPath(appDirectory, "/questionImages", question.getImage().getUrl(), question.getImage().getMediaId());
+                pathToImage = fileOperator.writeQuestionImageToFileAndGetPath(appDirectory, "/questionImages", question.getImage().getUrl(), questionId);
             }
             QuizQuestion quizQuestion = new QuizQuestion(quizId, question.getText(), question.getOrder(), 0, questionId, question.getType(), pathToImage);
             quizQuestions.add(quizQuestion);
@@ -62,9 +62,10 @@ public class DataLoader {
         List<Answer> answers = question.getAnswers();
         List<QuestionAnswer> questionAnswers = new ArrayList<>();
         for (Answer answer : answers) {
+            long imageId = UUID.randomUUID().getMostSignificantBits();
             String pathToImage = "";
             if (question.getAnswer() == AnswerType.ANSWER_IMAGE) {
-                pathToImage = fileOperator.writeAnswerImageToFileAndGetPath(appDirectory, "/answerImages", answer.getImage().getUrl(), answer.getImage().getMediaId());
+                pathToImage = fileOperator.writeAnswerImageToFileAndGetPath(appDirectory, "/answerImages", answer.getImage().getUrl(), imageId);
             }
             QuestionAnswer questionAnswer = new QuestionAnswer(answer.getText(), answer.isCorrect(), pathToImage, questionId, question.getAnswer());
             questionAnswers.add(questionAnswer);

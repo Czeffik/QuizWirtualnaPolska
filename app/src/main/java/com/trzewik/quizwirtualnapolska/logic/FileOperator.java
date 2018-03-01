@@ -17,18 +17,18 @@ public class FileOperator {
         return appDirectory + filesDirectory + imageLoader.getImageName(imageUrlAddress) + imageUniqueId;
     }
 
-    public String writeAnswerImageToFileAndGetPath(String appDirectory, String filesDirectory, String imageUrlAddress, String imageUniqueId) {
+    public String writeAnswerImageToFileAndGetPath(String appDirectory, String filesDirectory, String imageUrlAddress, long imageUniqueId) {
         try {
-            writeImageToFile(appDirectory, filesDirectory, imageUrlAddress, imageUniqueId, 200, 200);
+            writeImageToFile(appDirectory, filesDirectory, imageUrlAddress, String.valueOf(imageUniqueId), 200, 200);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return appDirectory + filesDirectory + imageLoader.getImageName(imageUrlAddress) + imageUniqueId;
     }
 
-    public String writeQuestionImageToFileAndGetPath(String appDirectory, String filesDirectory, String imageUrlAddress, String imageUniqueId) {
+    public String writeQuestionImageToFileAndGetPath(String appDirectory, String filesDirectory, String imageUrlAddress, long imageUniqueId) {
         try {
-            writeImageToFile(appDirectory, filesDirectory, imageUrlAddress, imageUniqueId, 400, 400);
+            writeImageToFile(appDirectory, filesDirectory, imageUrlAddress, String.valueOf(imageUniqueId), 400, 400);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -45,6 +45,4 @@ public class FileOperator {
             fileOutputStream.close();
         }
     }
-
-
 }
