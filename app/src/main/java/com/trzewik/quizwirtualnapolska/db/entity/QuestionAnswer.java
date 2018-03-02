@@ -10,7 +10,7 @@ import com.trzewik.quizwirtualnapolska.model.quizDetails.enums.AnswerType;
 
 @Entity
 public class QuestionAnswer {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     private long id;
 
     @ColumnInfo
@@ -35,7 +35,8 @@ public class QuestionAnswer {
     }
 
     @Ignore
-    public QuestionAnswer(String text, int isCorrect, String imageUrl, long questionId, AnswerType answerType) {
+    public QuestionAnswer(long id, String text, int isCorrect, String imageUrl, long questionId, AnswerType answerType) {
+        this.id = id;
         this.text = text;
         this.isCorrect = isCorrect;
         this.questionId = questionId;

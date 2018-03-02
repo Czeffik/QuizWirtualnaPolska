@@ -46,7 +46,9 @@ public class ApiClient {
         Request request = new Request.Builder().url(url).build();
         Response response = client.newCall(request).execute();
         String body = response.body().string();
-        LOGGER.info("Status:  " + body);
+        int code = response.code();
+        LOGGER.info("Status: " + code);
+        LOGGER.info("Body:  " + body);
         return new JSONObject(body);
     }
 
@@ -56,7 +58,9 @@ public class ApiClient {
         Request request = new Request.Builder().url(url).build();
         Response response = client.newCall(request).execute();
         String body = response.body().string();
-        LOGGER.info("Status:  " + body);
+        int code = response.code();
+        LOGGER.info("Status: " + code);
+        LOGGER.info("Body: " + body);
         return new JSONObject(body);
     }
 }

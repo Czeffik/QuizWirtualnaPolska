@@ -54,7 +54,8 @@ public class DataLoader {
         List<Answer> answers = question.getAnswers();
         List<QuestionAnswer> questionAnswers = new ArrayList<>();
         for (Answer answer : answers) {
-            QuestionAnswer questionAnswer = new QuestionAnswer(answer.getText(), answer.isCorrect(), answer.getImage().getUrl(), questionId, question.getAnswer());
+            long answerId = UUID.randomUUID().getMostSignificantBits();
+            QuestionAnswer questionAnswer = new QuestionAnswer(answerId, answer.getText(), answer.isCorrect(), answer.getImage().getUrl(), questionId, question.getAnswer());
             questionAnswers.add(questionAnswer);
         }
         databaseController.insertQuestionAnswerListToDatabase(questionAnswers);

@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.trzewik.quizwirtualnapolska.App;
 import com.trzewik.quizwirtualnapolska.R;
@@ -24,9 +25,10 @@ import java.util.List;
 
 public class QuizListActivity extends AppCompatActivity {
     private static int START_INDEX = 0;
-    private static int MAX_RESULT = 50;
+    private static int MAX_RESULT = 10;
 
     private ListView listView;
+    private ProgressBar progressBar;
     private DatabaseController databaseController = new DatabaseController();
 
     @Override
@@ -34,7 +36,8 @@ public class QuizListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_list);
         listView = findViewById(R.id.list);
-        if (isOnline() || databaseController.getQuizListFromDb().size() > 0) {
+        progressBar = findViewById(R.id.progressBar);
+        if (isOnline() || databaseController.getNumberOfQuizzes() > 0) {
             insertAndDisplayData(START_INDEX, MAX_RESULT);
         } else {
             populateAlertDialog();
@@ -53,6 +56,7 @@ public class QuizListActivity extends AppCompatActivity {
             public void run() {
                 List<Quiz> quizzes = databaseController.getQuizListFromDb();
                 if (App.get().isForceUpdate() || quizzes.isEmpty()) {
+                    populateProgressBar();
                     new DataLoader().retrieveData(getApplicationInfo().dataDir, startIndex, maxResult);
                     populateQuizList();
                 } else {
@@ -66,6 +70,7 @@ public class QuizListActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                populateProgressBar();
                 QuizAdapter quizAdapter = new QuizAdapter(databaseController.getQuizListFromDb(), getApplicationContext());
                 listView.setAdapter(quizAdapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -79,6 +84,27 @@ public class QuizListActivity extends AppCompatActivity {
 
                     }
                 });
+            }
+        });
+    }
+
+    private void populateProgressBar(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                int numberOfQuizzes = databaseController.getNumberOfQuizzes();
+                while (numberOfQuizzes<MAX_RESULT){
+                    progressBar.setMax(MAX_RESULT);
+                    progressBar.setVisibility(View.VISIBLE);
+                    progressBar.setProgress(numberOfQuizzes);
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    numberOfQuizzes = databaseController.getNumberOfQuizzes();
+                }
+                progressBar.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -113,5 +139,6 @@ public class QuizListActivity extends AppCompatActivity {
         bundle.putLong("id", id);
         return bundle;
     }
+
 
 }

@@ -13,31 +13,66 @@ import java.util.logging.Logger;
 
 class DataFetcher {
     final static private Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-    private ApiClient apiClient = new ApiClient();
+//TODO new Thread()
+//    Map<Long, QuizDetails> getQuizDetails(List<Item> items) {
+//        final Map<Long, QuizDetails> mapWithQuizDetails = new HashMap<>();
+//        for (final Item item : items) {
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    long itemId = item.getId();
+//                    QuizDetails quizDetails = new ApiClient().getQuizDetails(itemId, 0);
+//                    mapWithQuizDetails.put(itemId, quizDetails);
+//                }
+//            }).start();
+//        }
+//        int numberOfItems = items.size();
+//        waitFor(mapWithQuizDetails, numberOfItems);
+//        return mapWithQuizDetails;
+//    }
+
+//TODO ExecuteService
+//    Map<Long, QuizDetails> getQuizDetails(final List<Item> items) {
+//        final Map<Long, QuizDetails> mapWithQuizDetails = new HashMap<>();
+//
+//        ExecutorService es = Executors.newCachedThreadPool();
+//        int availableProcessors = Runtime.getRuntime().availableProcessors();
+//        for(int i=0;i<availableProcessors;i++) {
+//            es.execute(new Runnable() {
+//                @Override
+//                public void run() {
+//                    for (Item item : items) {
+//                        long itemId = item.getId();
+//                        QuizDetails quizDetails = new ApiClient().getQuizDetails(itemId, 0);
+//                        mapWithQuizDetails.put(itemId, quizDetails);
+//                    }
+//                }
+//            });
+//        }
+//        es.shutdown();
+//        int numberOfItems = items.size();
+//        waitFor(mapWithQuizDetails, numberOfItems);
+//        return mapWithQuizDetails;
+//    }
 
     Map<Long, QuizDetails> getQuizDetails(List<Item> items) {
-        final Map<Long, QuizDetails> quizDetails = new HashMap<>();
-        for (final Item item : items) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    long itemId = item.getId();
-                    quizDetails.put(itemId, apiClient.getQuizDetails(itemId, 0));
-                }
-            }).start();
+        Map<Long, QuizDetails> mapWithQuizDetails = new HashMap<>();
+        for (Item item : items) {
+            long itemId = item.getId();
+            QuizDetails quizDetails = new ApiClient().getQuizDetails(itemId, 0);
+            mapWithQuizDetails.put(itemId, quizDetails);
         }
-        waitFor(quizDetails, items.size());
-        return quizDetails;
+        return mapWithQuizDetails;
     }
 
     List<Item> getItems(int startIndex, int maxResult) {
-        Quizzes quizzes = apiClient.getQuizzes(startIndex, maxResult);
+        Quizzes quizzes = new ApiClient().getQuizzes(startIndex, maxResult);
         return quizzes.getItems();
     }
 
     private void waitFor(Map<Long, QuizDetails> map, int maxResult) {
         if (map.keySet().size() != maxResult) {
-            LOGGER.info("Waiting for downloading! Fetched: " + map.keySet().size());
+            LOGGER.info("Waiting for downloading! Fetched: " + map.keySet().size() + " should be: " + maxResult);
             try {
                 Thread.sleep(200);
             } catch (InterruptedException e) {

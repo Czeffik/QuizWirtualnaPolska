@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "89fca2fdeff4a8a197db689d6f444aba",
+    "identityHash": "49a476d7635bcdaa9d0edaa80ed1137a",
     "entities": [
       {
         "tableName": "Quiz",
@@ -136,7 +136,7 @@
       },
       {
         "tableName": "QuestionAnswer",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `questionId` INTEGER NOT NULL, `text` TEXT, `isCorrect` INTEGER NOT NULL, `imageUrl` TEXT, `pathToImage` TEXT, `answerType` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `questionId` INTEGER NOT NULL, `text` TEXT, `isCorrect` INTEGER NOT NULL, `imageUrl` TEXT, `pathToImage` TEXT, `answerType` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -185,7 +185,7 @@
           "columnNames": [
             "id"
           ],
-          "autoGenerate": true
+          "autoGenerate": false
         },
         "indices": [],
         "foreignKeys": []
@@ -193,7 +193,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"89fca2fdeff4a8a197db689d6f444aba\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"49a476d7635bcdaa9d0edaa80ed1137a\")"
     ]
   }
 }
