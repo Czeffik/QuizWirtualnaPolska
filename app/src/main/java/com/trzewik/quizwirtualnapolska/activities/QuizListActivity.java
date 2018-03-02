@@ -1,6 +1,12 @@
 package com.trzewik.quizwirtualnapolska.activities;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -23,13 +29,16 @@ public class QuizListActivity extends AppCompatActivity {
     private ListView listView;
     private DatabaseController databaseController = new DatabaseController();
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_list);
-        listView = (ListView) findViewById(R.id.list);
-        insertAndDisplayData(START_INDEX, MAX_RESULT);
+        listView = findViewById(R.id.list);
+        if (isOnline() || databaseController.getQuizListFromDb().size() > 0) {
+            insertAndDisplayData(START_INDEX, MAX_RESULT);
+        } else {
+            populateAlertDialog();
+        }
     }
 
     @Override
@@ -53,7 +62,6 @@ public class QuizListActivity extends AppCompatActivity {
         }).start();
     }
 
-
     private void populateQuizList() {
         runOnUiThread(new Runnable() {
             @Override
@@ -73,6 +81,31 @@ public class QuizListActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    private void populateAlertDialog() {
+        AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(this);
+        }
+        builder.setTitle("Informacja")
+                .setMessage("Przy pierwszym uruchomieniu wymagany jest dostęp do internetu! Jeśli chcesz korzystać z aplikacji włącz Internet i spróbuj ponownie.")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+    private boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
     private Bundle setBundle(long id) {

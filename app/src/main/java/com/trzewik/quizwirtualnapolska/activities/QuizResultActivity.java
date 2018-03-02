@@ -41,7 +41,7 @@ public class QuizResultActivity extends AppCompatActivity {
 
     }
 
-    private void populateView(){
+    private void populateView() {
         populateTitle();
         populateUnderTitle();
         populatePercentage();
@@ -89,7 +89,7 @@ public class QuizResultActivity extends AppCompatActivity {
         });
     }
 
-    private void populateTryAgainButton(){
+    private void populateTryAgainButton() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -108,7 +108,7 @@ public class QuizResultActivity extends AppCompatActivity {
         });
     }
 
-    private void populateQuizListButton(){
+    private void populateQuizListButton() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

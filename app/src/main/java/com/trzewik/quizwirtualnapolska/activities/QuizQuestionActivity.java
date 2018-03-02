@@ -114,7 +114,7 @@ public class QuizQuestionActivity extends AppCompatActivity {
                 int allQuestions = answersCalculator.getNumberOfQuestions(quizId);
                 int notAnsweredQuestions = answersCalculator.getNumberOfNotAnsweredQuestions(quizId);
                 progressBar.setMax(allQuestions);
-                progressBar.setProgress(allQuestions-notAnsweredQuestions);
+                progressBar.setProgress(allQuestions - notAnsweredQuestions);
             }
         });
     }
