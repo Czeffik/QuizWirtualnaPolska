@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "49a476d7635bcdaa9d0edaa80ed1137a",
+    "identityHash": "7c54d027838b7753c38d556a76084219",
     "entities": [
       {
         "tableName": "Quiz",
@@ -189,11 +189,49 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "Rate",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `valueFrom` INTEGER NOT NULL, `valueTo` INTEGER NOT NULL, `message` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "valueFrom",
+            "columnName": "valueFrom",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "valueTo",
+            "columnName": "valueTo",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "message",
+            "columnName": "message",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"49a476d7635bcdaa9d0edaa80ed1137a\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"7c54d027838b7753c38d556a76084219\")"
     ]
   }
 }

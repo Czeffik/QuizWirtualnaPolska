@@ -54,7 +54,7 @@ public class QuizResultActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                title.setText("");
+                title.setText(databaseController.getRateMessage(new AnswersCalculator().getPercentageOfCorrectAnswers(getId())));
             }
         });
     }

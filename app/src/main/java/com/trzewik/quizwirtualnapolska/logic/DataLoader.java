@@ -6,6 +6,7 @@ import com.trzewik.quizwirtualnapolska.db.entity.Quiz;
 import com.trzewik.quizwirtualnapolska.db.entity.QuizQuestion;
 import com.trzewik.quizwirtualnapolska.model.quizDetails.Question;
 import com.trzewik.quizwirtualnapolska.model.quizDetails.QuizDetails;
+import com.trzewik.quizwirtualnapolska.model.quizDetails.Rate;
 import com.trzewik.quizwirtualnapolska.model.quizDetails.question.Answer;
 import com.trzewik.quizwirtualnapolska.model.quizList.Item;
 
@@ -25,6 +26,7 @@ public class DataLoader {
     private void fetchQuizListQuizDetailsAndQuizAnswers(String appDirectory, int startIndex, int maxResult) {
         List<Item> items = dataFetcher.getItems(startIndex, maxResult);
         Map<Long, QuizDetails> quizDetailsMap = dataFetcher.getQuizDetails(items);
+        fetchRates(quizDetailsMap.get(items.get(0).getId()));
         List<Quiz> quizzes = new ArrayList<>();
         for (Item item : items) {
             long itemId = item.getId();
@@ -61,5 +63,15 @@ public class DataLoader {
         databaseController.insertQuestionAnswerListToDatabase(questionAnswers);
         databaseController.setPathToAnswerImageInDatabase(questionAnswers, appDirectory);
         return questionAnswers;
+    }
+
+    private void fetchRates(QuizDetails quizDetails){
+        List<Rate> rates = quizDetails.getRates();
+        List<com.trzewik.quizwirtualnapolska.db.entity.Rate> ratesToDb = new ArrayList<>();
+        for (Rate rate : rates){
+            com.trzewik.quizwirtualnapolska.db.entity.Rate rateDb = new com.trzewik.quizwirtualnapolska.db.entity.Rate(rate.getFrom(), rate.getTo(), rate.getContent());
+            ratesToDb.add(rateDb);
+        }
+        databaseController.insertRatesListToDatabase(ratesToDb);
     }
 }

@@ -5,9 +5,11 @@ import com.trzewik.quizwirtualnapolska.db.QuizDatabase;
 import com.trzewik.quizwirtualnapolska.db.dao.QuestionAnswerDao;
 import com.trzewik.quizwirtualnapolska.db.dao.QuizDao;
 import com.trzewik.quizwirtualnapolska.db.dao.QuizQuestionDao;
+import com.trzewik.quizwirtualnapolska.db.dao.RateDao;
 import com.trzewik.quizwirtualnapolska.db.entity.QuestionAnswer;
 import com.trzewik.quizwirtualnapolska.db.entity.Quiz;
 import com.trzewik.quizwirtualnapolska.db.entity.QuizQuestion;
+import com.trzewik.quizwirtualnapolska.db.entity.Rate;
 import com.trzewik.quizwirtualnapolska.model.quizDetails.enums.AnswerType;
 import com.trzewik.quizwirtualnapolska.model.quizDetails.enums.QuestionType;
 
@@ -18,15 +20,30 @@ import java.util.logging.Logger;
 public class DatabaseController {
     private App app = App.get();
     private QuizDatabase database = app.getDatabase();
+
     private QuizDao quizTable = database.quizDao();
     private QuizQuestionDao questionTable = database.quizQuestionDao();
     private QuestionAnswerDao answerTable = database.questionAnswerDao();
+    private RateDao rateTable = database.rateDao();
+
     private ImageLoader imageLoader = new ImageLoader();
     private FileOperator fileOperator = new FileOperator();
     private int availableProcessors = Runtime.getRuntime().availableProcessors();
 
     final static private Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
+    public void insertRatesListToDatabase(List<Rate> rates){rateTable.insertAll(rates);}
+    public List<Rate> getAllRates(){return rateTable.getAll();}
+    public String getRateMessage(int result){
+        List<Rate> rates = getAllRates();
+        String message = null;
+        for (Rate rate : rates){
+            if (result >= rate.getValueFrom() && result<=rate.getValueTo()){
+                message = rate.getMessage();
+            }
+        }
+        return message;
+    }
     public void updateQuiz(Quiz quiz) {
         quizTable.update(quiz);
     }
