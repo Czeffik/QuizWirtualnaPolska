@@ -30,4 +30,7 @@ public interface QuestionAnswerDao {
 
     @Query("SELECT * FROM QuestionAnswer WHERE id = :id")
     QuestionAnswer getQuestionAnswerByAnswerId(long id);
+
+    @Query("SELECT Count(*) FROM questionAnswer")
+    int getNumberOfRows();
 }

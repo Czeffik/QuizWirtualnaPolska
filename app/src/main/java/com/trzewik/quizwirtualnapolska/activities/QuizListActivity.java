@@ -22,8 +22,10 @@ import com.trzewik.quizwirtualnapolska.logic.DataLoader;
 import com.trzewik.quizwirtualnapolska.logic.DatabaseController;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 public class QuizListActivity extends AppCompatActivity {
+    final static private Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     private static int START_INDEX = 0;
     private static int MAX_RESULT = 10;
 
@@ -37,6 +39,7 @@ public class QuizListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_quiz_list);
         listView = findViewById(R.id.list);
         progressBar = findViewById(R.id.progressBar);
+
         if (isOnline() || databaseController.getNumberOfQuizzes() > 0) {
             insertAndDisplayData(START_INDEX, MAX_RESULT);
         } else {
@@ -70,7 +73,6 @@ public class QuizListActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                populateProgressBar();
                 QuizAdapter quizAdapter = new QuizAdapter(databaseController.getQuizListFromDb(), getApplicationContext());
                 listView.setAdapter(quizAdapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -92,19 +94,25 @@ public class QuizListActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                listView.setVisibility(View.INVISIBLE);
                 int numberOfQuizzes = databaseController.getNumberOfQuizzes();
+                LOGGER.info("MAMY NUMER QUIZOW: " + numberOfQuizzes);
                 while (numberOfQuizzes<MAX_RESULT){
-                    progressBar.setMax(MAX_RESULT);
+                    progressBar.setMax(MAX_RESULT*3*10);
                     progressBar.setVisibility(View.VISIBLE);
-                    progressBar.setProgress(numberOfQuizzes);
+                    LOGGER.info("MAMY NUMER ODPOWIEDZI w WHILE'e: " + databaseController.getNumberOfAnswers());
+                    progressBar.setProgress(databaseController.getNumberOfAnswers());
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                     numberOfQuizzes = databaseController.getNumberOfQuizzes();
+                    LOGGER.info("MAMY NUMER QUIZOW w WHILE'e: " + numberOfQuizzes);
                 }
+                progressBar.setProgress(MAX_RESULT);
                 progressBar.setVisibility(View.INVISIBLE);
+                listView.setVisibility(View.VISIBLE);
             }
         });
     }

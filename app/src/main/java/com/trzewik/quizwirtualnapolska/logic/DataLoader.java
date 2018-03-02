@@ -43,7 +43,7 @@ public class DataLoader {
         List<QuizQuestion> quizQuestions = new ArrayList<>();
         for (Question question : questions) {
             long questionId = UUID.randomUUID().getMostSignificantBits();
-            List<QuestionAnswer> questionAnswers = fetchQuizAnswers(appDirectory, question, questionId);
+            fetchQuizAnswers(appDirectory, question, questionId);
             QuizQuestion quizQuestion = new QuizQuestion(quizId, question.getText(), question.getOrder(), questionId, question.getType(), question.getImage().getUrl());
             quizQuestions.add(quizQuestion);
         }
@@ -52,7 +52,7 @@ public class DataLoader {
         return quizQuestions;
     }
 
-    private List<QuestionAnswer> fetchQuizAnswers(String appDirectory, Question question, long questionId) {
+    private void fetchQuizAnswers(String appDirectory, Question question, long questionId) {
         List<Answer> answers = question.getAnswers();
         List<QuestionAnswer> questionAnswers = new ArrayList<>();
         for (Answer answer : answers) {
@@ -62,7 +62,6 @@ public class DataLoader {
         }
         databaseController.insertQuestionAnswerListToDatabase(questionAnswers);
         databaseController.setPathToAnswerImageInDatabase(questionAnswers, appDirectory);
-        return questionAnswers;
     }
 
     private void fetchRates(QuizDetails quizDetails){

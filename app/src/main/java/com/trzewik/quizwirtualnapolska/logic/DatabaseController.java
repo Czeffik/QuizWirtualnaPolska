@@ -58,6 +58,8 @@ public class DatabaseController {
 
     public int getNumberOfQuizzes(){return quizTable.getNumberOfRows();}
 
+    public int getNumberOfAnswers(){return answerTable.getNumberOfRows();}
+
     public List<Quiz> getQuizListFromDb() {
         return quizTable.getAll();
     }
