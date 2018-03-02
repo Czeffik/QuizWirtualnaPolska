@@ -52,9 +52,8 @@ public class QuizQuestionActivity extends AppCompatActivity {
         List<QuizQuestion> quizQuestions = databaseController.getNotAnsweredQuizQuestionsByQuizId(quizId);
         if (quizQuestions.size() > 0) {
             QuizQuestion quizQuestion = quizQuestions.get(0);
-            quizId = quizQuestion.getId();
-            List<QuestionAnswer> questionAnswers = databaseController.getQuizAnswerByQuestionId(quizId);
-
+            long questionId = quizQuestion.getId();
+            List<QuestionAnswer> questionAnswers = databaseController.getQuizAnswerByQuestionId(questionId);
             populateTitle(quiz);
             populateQuestion(quizQuestion);
             populateAnswers(questionAnswers);
@@ -115,8 +114,7 @@ public class QuizQuestionActivity extends AppCompatActivity {
                 int allQuestions = answersCalculator.getNumberOfQuestions(quizId);
                 int notAnsweredQuestions = answersCalculator.getNumberOfNotAnsweredQuestions(quizId);
                 progressBar.setMax(allQuestions);
-                progressBar.setProgress(allQuestions - notAnsweredQuestions);
-                progressBar.setVisibility(View.VISIBLE);
+                progressBar.setProgress(allQuestions-notAnsweredQuestions);
             }
         });
     }

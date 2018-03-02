@@ -1,6 +1,5 @@
 package com.trzewik.quizwirtualnapolska.adapters;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 
 import com.trzewik.quizwirtualnapolska.R;
 import com.trzewik.quizwirtualnapolska.db.entity.Quiz;
-import com.trzewik.quizwirtualnapolska.logic.AnswersCalculator;
 
 import java.util.List;
 
@@ -22,7 +20,7 @@ public class QuizAdapter extends ArrayAdapter<Quiz> {
 
     Context mContext;
     private List<Quiz> quizzes;
-    private AnswersCalculator answersCalculator = new AnswersCalculator();
+
 
     public QuizAdapter(List<Quiz> quizzes, Context context) {
         super(context, R.layout.quiz_item, quizzes);
@@ -30,7 +28,7 @@ public class QuizAdapter extends ArrayAdapter<Quiz> {
         this.mContext = context;
     }
 
-    @SuppressLint("SetTextI18n")
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Quiz quiz = getItem(position);
@@ -53,20 +51,19 @@ public class QuizAdapter extends ArrayAdapter<Quiz> {
         }
 
         viewHolder.txtTitle.setText(quiz.getTitle());
-        long quizId = quiz.getId();
-        int numberOfQuestionWithoutAnswer = answersCalculator.getNumberOfNotAnsweredQuestions(quizId);
-        int numberOfQuestion = answersCalculator.getNumberOfQuestions(quizId);
-        int numberOfCorrectAnswers = answersCalculator.getNumberOfCorrectAnswers(quizId);
-        int percentOfCorrectAnswers = answersCalculator.getPercentageOfCorrectAnswers(quizId);
-        int percentOfQuizComplete = ((numberOfQuestion-numberOfQuestionWithoutAnswer)*100)/numberOfQuestion;
-        if (numberOfQuestionWithoutAnswer==0) {
-            viewHolder.txtDescription.setText("Ostatni wynik: " + numberOfCorrectAnswers + "/" + numberOfQuestion + " " +percentOfCorrectAnswers+"%");
+
+
+        if (quiz.getLastResult() == quiz.getNumberOfQuestions()) {
+            int percent = (quiz.getCorrectAnswers() * 100) / quiz.getNumberOfQuestions();
+            String textToDisplay = "Ostatni wynik: " + quiz.getCorrectAnswers() + "/" + quiz.getNumberOfQuestions() +" "+percent;
+            viewHolder.txtDescription.setText(textToDisplay);
+        } else if (quiz.getLastResult() > 0) {
+            int percent = (quiz.getLastResult() * 100) / quiz.getNumberOfQuestions();
+            String textToDisplay = "Quiz rozwiązany w " + percent + "%";
+            viewHolder.txtDescription.setText(textToDisplay);
         }
-        else if (numberOfQuestion-numberOfQuestionWithoutAnswer>0){
-            viewHolder.txtDescription.setText("Quiz rozwiązany w: " + percentOfQuizComplete +"%");
-        }
-        else{
-            viewHolder.txtDescription.setText(quiz.getContent());
+        else {
+            viewHolder.txtDescription.setText("");
         }
 
         Bitmap bMap = BitmapFactory.decodeFile(quiz.getImagePath());

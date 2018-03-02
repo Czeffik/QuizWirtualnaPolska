@@ -37,26 +37,33 @@ public class DatabaseController {
 
     public void setQuestionAnswer(long quizQuestionId, long answerId) {
         QuizQuestion quizQuestion = getQuizQuestionByQuestionId(quizQuestionId);
+        Quiz quiz = getQuizById(quizQuestion.getQuizId());
         QuestionAnswer questionAnswer = getAnswerByAnswerId(answerId);
         if (questionAnswer.getIsCorrect() == 1) {
             quizQuestion.setCorrectAnswer(1);
-            quizQuestion.setAnswered(1);
+            quiz.setCorrectAnswers(quiz.getCorrectAnswers() + 1);
         } else {
             quizQuestion.setCorrectAnswer(0);
-            quizQuestion.setAnswered(1);
         }
+        quizQuestion.setAnswered(1);
+        quiz.setLastResult(quiz.getLastResult() + 1);
+        quizTable.update(quiz);
         questionTable.update(quizQuestion);
     }
 
-    public void clearQuizAnswers(long quizId){
+    public void clearQuizAnswers(long quizId) {
+        Quiz quiz = getQuizById(quizId);
+        quiz.setCorrectAnswers(0);
+        quiz.setLastResult(0);
+        quizTable.update(quiz);
         questionTable.clearQuizAnswersByQuizId(quizId);
     }
 
-    public List<QuizQuestion> getQuestionsWithCorrectAnswers(long quizId){
+    public List<QuizQuestion> getQuestionsWithCorrectAnswers(long quizId) {
         return questionTable.getQuizQuestionsWithCorrectAnswersByQuizId(quizId);
     }
 
-    public List<QuizQuestion> getQuestionsByQuizId(long quizId){
+    public List<QuizQuestion> getQuestionsByQuizId(long quizId) {
         return questionTable.getQuestionsByQuizId(quizId);
     }
 

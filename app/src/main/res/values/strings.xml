@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">Quiz Wirtualna Polska</string>
+    <string name="app_name">WP Quiz</string>
     <string name="title_activity_quiz_question">QuizQuestion</string>
 </resources>

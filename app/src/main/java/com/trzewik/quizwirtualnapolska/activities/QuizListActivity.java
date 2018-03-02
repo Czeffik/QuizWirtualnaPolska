@@ -21,7 +21,6 @@ public class QuizListActivity extends AppCompatActivity {
     private static int MAX_RESULT = 20;
 
     private ListView listView;
-    private DataLoader dataLoader = new DataLoader();
     private DatabaseController databaseController = new DatabaseController();
 
 
@@ -31,6 +30,12 @@ public class QuizListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_quiz_list);
         listView = (ListView) findViewById(R.id.list);
         insertAndDisplayData(START_INDEX, MAX_RESULT);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        populateQuizList();
     }
 
     private void insertAndDisplayData(final int startIndex, final int maxResult) {

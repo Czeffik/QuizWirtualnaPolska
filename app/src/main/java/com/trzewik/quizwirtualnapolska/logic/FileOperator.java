@@ -10,7 +10,7 @@ public class FileOperator {
 
     public String writeQuizImageToFileAndGetPath(String appDirectory, String filesDirectory, String imageUrlAddress, long imageUniqueId) {
         try {
-            writeImageToFile(appDirectory, filesDirectory, imageUrlAddress, String.valueOf(imageUniqueId), 200, 200);
+            writeImageToFile(appDirectory, filesDirectory, imageUrlAddress, String.valueOf(imageUniqueId), 300, 300);
         } catch (IOException e) {
             e.printStackTrace();
         }

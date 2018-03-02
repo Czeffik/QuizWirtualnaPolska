@@ -12,6 +12,12 @@ public class AnswersCalculator {
         return (getNumberOfCorrectAnswers(quizId)*100)/getNumberOfQuestions(quizId);
     }
 
+    public int getPercentageProgress(long quizId){
+        int numberQuestionsWithoutAnswers = getNumberOfNotAnsweredQuestions(quizId);
+        int numberOfAllQuestions = getNumberOfQuestions(quizId);
+        return ((numberOfAllQuestions-numberQuestionsWithoutAnswers)*100)/numberOfAllQuestions;
+    }
+
     public int getNumberOfCorrectAnswers(long quizId){
         List<QuizQuestion> questionsWithCorrectAnswers = databaseController.getQuestionsWithCorrectAnswers(quizId);
         return questionsWithCorrectAnswers.size();

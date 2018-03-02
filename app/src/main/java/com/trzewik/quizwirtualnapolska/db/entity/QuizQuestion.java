@@ -39,14 +39,16 @@ public class QuizQuestion {
     }
 
     @Ignore
-    public QuizQuestion(long quizId, String text, int order, int answered, long id, QuestionType questionType, String pathToImage) {
+    public QuizQuestion(long quizId, String text, int order, long id, QuestionType questionType, String pathToImage) {
+        this.id = id;
         this.quizId = quizId;
         this.text = text;
         this.order = order;
-        this.answered = answered;
-        this.id = id;
         this.questionType = String.valueOf(questionType);
         this.pathToImage = pathToImage;
+        this.answered = 0;
+        this.correctAnswer = 0;
+
     }
 
     public long getId() {

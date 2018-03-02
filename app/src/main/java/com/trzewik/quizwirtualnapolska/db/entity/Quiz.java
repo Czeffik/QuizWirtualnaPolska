@@ -15,10 +15,10 @@ public class Quiz {
     private String title;
 
     @ColumnInfo
-    private int resolved;
+    private int lastResult;
 
     @ColumnInfo
-    private int lastResult;
+    private int correctAnswers;
 
     @ColumnInfo
     private int numberOfQuestions;
@@ -33,11 +33,14 @@ public class Quiz {
     }
 
     @Ignore
-    public Quiz(long id, String title, String imagePath, String content) {
+    public Quiz(long id, String title, String imagePath, String content, int numberOfQuestions) {
         this.id = id;
         this.title = title;
         this.imagePath = imagePath;
         this.content = content;
+        this.numberOfQuestions = numberOfQuestions;
+        this.lastResult = 0;
+        this.correctAnswers = 0;
     }
 
     public long getId() {
@@ -54,14 +57,6 @@ public class Quiz {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public int getResolved() {
-        return resolved;
-    }
-
-    public void setResolved(int resolved) {
-        this.resolved = resolved;
     }
 
     public int getLastResult() {
@@ -94,5 +89,13 @@ public class Quiz {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public int getCorrectAnswers() {
+        return correctAnswers;
+    }
+
+    public void setCorrectAnswers(int correctAnswers) {
+        this.correctAnswers = correctAnswers;
     }
 }
