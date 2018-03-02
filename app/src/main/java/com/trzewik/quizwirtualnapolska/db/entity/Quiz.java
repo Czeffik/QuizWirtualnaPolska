@@ -24,7 +24,10 @@ public class Quiz {
     private int numberOfQuestions;
 
     @ColumnInfo
-    private String imagePath;
+    private String imageUrl;
+
+    @ColumnInfo
+    private String pathToImage;
 
     @ColumnInfo
     private String content;
@@ -33,14 +36,15 @@ public class Quiz {
     }
 
     @Ignore
-    public Quiz(long id, String title, String imagePath, String content, int numberOfQuestions) {
+    public Quiz(long id, String title, String imageUrl, String content, int numberOfQuestions) {
         this.id = id;
         this.title = title;
-        this.imagePath = imagePath;
+        this.imageUrl = imageUrl;
         this.content = content;
         this.numberOfQuestions = numberOfQuestions;
         this.lastResult = 0;
         this.correctAnswers = 0;
+        this.pathToImage = "";
     }
 
     public long getId() {
@@ -75,12 +79,12 @@ public class Quiz {
         this.numberOfQuestions = numberOfQuestions;
     }
 
-    public String getImagePath() {
-        return imagePath;
+    public String getPathToImage() {
+        return pathToImage;
     }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public void setPathToImage(String pathToImage) {
+        this.pathToImage = pathToImage;
     }
 
     public String getContent() {
@@ -97,5 +101,13 @@ public class Quiz {
 
     public void setCorrectAnswers(int correctAnswers) {
         this.correctAnswers = correctAnswers;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

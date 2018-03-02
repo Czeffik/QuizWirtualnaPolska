@@ -79,12 +79,12 @@ public class AnswerListAdapter extends ArrayAdapter<QuestionAnswer> {
             viewHolder.text.setText(answer.getText());
         }
         else if (answer.getAnswerType().equals(AnswerType.ANSWER_IMAGE.toString())){
-            Bitmap bMap = BitmapFactory.decodeFile(answer.getImagePath());
+            Bitmap bMap = BitmapFactory.decodeFile(answer.getPathToImage());
             viewHolder.image.setImageBitmap(bMap);
         }
         else if (answer.getAnswerType().equals(AnswerType.ANSWER_TEXT_IMAGE.toString())){
             viewHolder.text.setText(answer.getText());
-            Bitmap bMap = BitmapFactory.decodeFile(answer.getImagePath());
+            Bitmap bMap = BitmapFactory.decodeFile(answer.getPathToImage());
             viewHolder.image.setImageBitmap(bMap);
         }
         else{

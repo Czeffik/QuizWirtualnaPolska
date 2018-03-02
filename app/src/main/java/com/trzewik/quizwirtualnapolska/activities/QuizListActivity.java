@@ -24,7 +24,7 @@ import java.util.List;
 
 public class QuizListActivity extends AppCompatActivity {
     private static int START_INDEX = 0;
-    private static int MAX_RESULT = 20;
+    private static int MAX_RESULT = 50;
 
     private ListView listView;
     private DatabaseController databaseController = new DatabaseController();

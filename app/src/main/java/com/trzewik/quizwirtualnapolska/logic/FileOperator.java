@@ -6,43 +6,16 @@ import java.io.IOException;
 
 public class FileOperator {
     private DirectoryCreator directoryCreator = new DirectoryCreator();
-    private ImageLoader imageLoader = new ImageLoader();
 
-    public String writeQuizImageToFileAndGetPath(String appDirectory, String filesDirectory, String imageUrlAddress, long imageUniqueId) {
-        try {
-            writeImageToFile(appDirectory, filesDirectory, imageUrlAddress, String.valueOf(imageUniqueId), 300, 300);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return appDirectory + filesDirectory + imageLoader.getImageName(imageUrlAddress) + imageUniqueId;
-    }
-
-    public String writeAnswerImageToFileAndGetPath(String appDirectory, String filesDirectory, String imageUrlAddress, long imageUniqueId) {
-        try {
-            writeImageToFile(appDirectory, filesDirectory, imageUrlAddress, String.valueOf(imageUniqueId), 200, 200);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return appDirectory + filesDirectory + imageLoader.getImageName(imageUrlAddress) + imageUniqueId;
-    }
-
-    public String writeQuestionImageToFileAndGetPath(String appDirectory, String filesDirectory, String imageUrlAddress, long imageUniqueId) {
-        try {
-            writeImageToFile(appDirectory, filesDirectory, imageUrlAddress, String.valueOf(imageUniqueId), 400, 400);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return appDirectory + filesDirectory + imageLoader.getImageName(imageUrlAddress) + imageUniqueId;
-    }
-
-    private void writeImageToFile(String appDirectory, String filesDirectory, String imageUrlAddress, String imageUniqueId, int targetWidth, int targetHeight) throws IOException {
-        byte[] byteArray = imageLoader.getImageAsByteArray(imageLoader.getResizedImageAsBitmap(imageUrlAddress, targetWidth, targetHeight));
+    public String writeImageToFile(String appDirectory, String filesDirectory, String imageUniqueId, byte[] byteArray) throws IOException {
+        String pathToImage = appDirectory + filesDirectory + imageUniqueId;
         directoryCreator.createDirectory(appDirectory, filesDirectory);
-        FileOutputStream fileOutputStream = new FileOutputStream(appDirectory + filesDirectory + imageLoader.getImageName(imageUrlAddress) + imageUniqueId);
+        FileOutputStream fileOutputStream = new FileOutputStream(pathToImage);
         try {
             fileOutputStream.write(byteArray);
         } finally {
             fileOutputStream.close();
         }
+        return pathToImage;
     }
 }

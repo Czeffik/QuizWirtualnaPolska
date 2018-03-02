@@ -23,7 +23,10 @@ public class QuestionAnswer {
     private int isCorrect;
 
     @ColumnInfo
-    private String imagePath;
+    private String imageUrl;
+
+    @ColumnInfo
+    private String pathToImage;
 
     @ColumnInfo
     private String answerType;
@@ -32,12 +35,13 @@ public class QuestionAnswer {
     }
 
     @Ignore
-    public QuestionAnswer(String text, int isCorrect, String imagePath, long questionId, AnswerType answerType) {
+    public QuestionAnswer(String text, int isCorrect, String imageUrl, long questionId, AnswerType answerType) {
         this.text = text;
         this.isCorrect = isCorrect;
-        this.imagePath = imagePath;
         this.questionId = questionId;
         this.answerType = String.valueOf(answerType);
+        this.imageUrl = imageUrl;
+        this.pathToImage = "";
     }
 
     public long getId() {
@@ -72,12 +76,12 @@ public class QuestionAnswer {
         this.isCorrect = isCorrect;
     }
 
-    public String getImagePath() {
-        return imagePath;
+    public String getPathToImage() {
+        return pathToImage;
     }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public void setPathToImage(String pathToImage) {
+        this.pathToImage = pathToImage;
     }
 
     public String getAnswerType() {
@@ -86,5 +90,13 @@ public class QuestionAnswer {
 
     public void setAnswerType(String answerType) {
         this.answerType = answerType;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

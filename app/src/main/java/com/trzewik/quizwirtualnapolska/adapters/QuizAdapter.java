@@ -66,7 +66,7 @@ public class QuizAdapter extends ArrayAdapter<Quiz> {
             viewHolder.txtDescription.setText("");
         }
 
-        Bitmap bMap = BitmapFactory.decodeFile(quiz.getImagePath());
+        Bitmap bMap = BitmapFactory.decodeFile(quiz.getPathToImage());
         viewHolder.image.setImageBitmap(bMap);
 
         return convertView;

@@ -2,15 +2,19 @@ package com.trzewik.quizwirtualnapolska.logic;
 
 
 import java.io.File;
+import java.util.logging.Logger;
 
-public class DirectoryCreator {
-    public void createDirectory(String pathToDirectory, String newDirectoryName) {
+class DirectoryCreator {
+    final static private Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+
+    void createDirectory(String pathToDirectory, String newDirectoryName) {
         File folder = new File(pathToDirectory + newDirectoryName);
         if (!folder.exists()) {
             if (folder.mkdir()) {
-                System.out.println("Folder created!");
+                LOGGER.info("Folder created!");
             } else {
-                System.out.println("Error! Folder not created!");
+                LOGGER.info("Folder not created! Retrying...");
+                createDirectory(pathToDirectory,newDirectoryName);
             }
         }
     }

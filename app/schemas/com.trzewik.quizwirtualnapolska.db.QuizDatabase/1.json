@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b59eaf10464a2d6578e8039429562d6a",
+    "identityHash": "89fca2fdeff4a8a197db689d6f444aba",
     "entities": [
       {
         "tableName": "Quiz",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `title` TEXT, `lastResult` INTEGER NOT NULL, `correctAnswers` INTEGER NOT NULL, `numberOfQuestions` INTEGER NOT NULL, `imagePath` TEXT, `content` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `title` TEXT, `lastResult` INTEGER NOT NULL, `correctAnswers` INTEGER NOT NULL, `numberOfQuestions` INTEGER NOT NULL, `imageUrl` TEXT, `pathToImage` TEXT, `content` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -39,8 +39,14 @@
             "notNull": true
           },
           {
-            "fieldPath": "imagePath",
-            "columnName": "imagePath",
+            "fieldPath": "imageUrl",
+            "columnName": "imageUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pathToImage",
+            "columnName": "pathToImage",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -62,7 +68,7 @@
       },
       {
         "tableName": "QuizQuestion",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `quizId` INTEGER NOT NULL, `text` TEXT, `order` INTEGER NOT NULL, `correctAnswer` INTEGER NOT NULL, `answered` INTEGER NOT NULL, `questionType` TEXT, `pathToImage` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `quizId` INTEGER NOT NULL, `text` TEXT, `order` INTEGER NOT NULL, `correctAnswer` INTEGER NOT NULL, `answered` INTEGER NOT NULL, `questionType` TEXT, `imageUrl` TEXT, `pathToImage` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -107,6 +113,12 @@
             "notNull": false
           },
           {
+            "fieldPath": "imageUrl",
+            "columnName": "imageUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
             "fieldPath": "pathToImage",
             "columnName": "pathToImage",
             "affinity": "TEXT",
@@ -124,7 +136,7 @@
       },
       {
         "tableName": "QuestionAnswer",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `questionId` INTEGER NOT NULL, `text` TEXT, `isCorrect` INTEGER NOT NULL, `imagePath` TEXT, `answerType` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `questionId` INTEGER NOT NULL, `text` TEXT, `isCorrect` INTEGER NOT NULL, `imageUrl` TEXT, `pathToImage` TEXT, `answerType` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -151,8 +163,14 @@
             "notNull": true
           },
           {
-            "fieldPath": "imagePath",
-            "columnName": "imagePath",
+            "fieldPath": "imageUrl",
+            "columnName": "imageUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pathToImage",
+            "columnName": "pathToImage",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -175,7 +193,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"b59eaf10464a2d6578e8039429562d6a\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"89fca2fdeff4a8a197db689d6f444aba\")"
     ]
   }
 }

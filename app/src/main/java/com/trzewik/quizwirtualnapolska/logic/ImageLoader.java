@@ -33,12 +33,6 @@ public class ImageLoader {
         return stream.toByteArray();
     }
 
-    public String getImageName(String imageAddress) {
-        String[] splittedImageAddress = imageAddress.split("/");
-        int arrayLength = splittedImageAddress.length;
-        return splittedImageAddress[arrayLength - 1];
-    }
-
     private Bitmap getImageAsBitmap(byte[] byteArray) {
         return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
     }
