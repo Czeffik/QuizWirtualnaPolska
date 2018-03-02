@@ -14,7 +14,6 @@ import com.trzewik.quizwirtualnapolska.model.quizDetails.enums.AnswerType;
 import com.trzewik.quizwirtualnapolska.model.quizDetails.enums.QuestionType;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 
 public class DatabaseController {
@@ -28,22 +27,26 @@ public class DatabaseController {
 
     private ImageLoader imageLoader = new ImageLoader();
     private FileOperator fileOperator = new FileOperator();
-    private int availableProcessors = Runtime.getRuntime().availableProcessors();
 
-    final static private Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    public void insertRatesListToDatabase(List<Rate> rates) {
+        rateTable.insertAll(rates);
+    }
 
-    public void insertRatesListToDatabase(List<Rate> rates){rateTable.insertAll(rates);}
-    public List<Rate> getAllRates(){return rateTable.getAll();}
-    public String getRateMessage(int result){
+    public List<Rate> getAllRates() {
+        return rateTable.getAll();
+    }
+
+    public String getRateMessage(int result) {
         List<Rate> rates = getAllRates();
         String message = null;
-        for (Rate rate : rates){
-            if (result >= rate.getValueFrom() && result<=rate.getValueTo()){
+        for (Rate rate : rates) {
+            if (result >= rate.getValueFrom() && result <= rate.getValueTo()) {
                 message = rate.getMessage();
             }
         }
         return message;
     }
+
     public void updateQuiz(Quiz quiz) {
         quizTable.update(quiz);
     }
@@ -56,9 +59,9 @@ public class DatabaseController {
         answerTable.update(questionAnswer);
     }
 
-    public int getNumberOfQuizzes(){return quizTable.getNumberOfRows();}
-
-    public int getNumberOfAnswers(){return answerTable.getNumberOfRows();}
+    public int getNumberOfQuizzes() {
+        return quizTable.getNumberOfRows();
+    }
 
     public List<Quiz> getQuizListFromDb() {
         return quizTable.getAll();
@@ -130,151 +133,6 @@ public class DatabaseController {
         answerTable.insertAll(questionAnswers);
         app.setForceUpdate(false);
     }
-//TODO new Thread()
-//    public void setPathToQuizImageInDatabase(List<Quiz> quizzes, final String appDirectory) {
-//        for (final Quiz quiz : quizzes) {
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    long quizId = quiz.getId();
-//                    String imageUrl = quiz.getImageUrl();
-//                    byte[] resizedImage = imageLoader.getImageAsByteArray(imageLoader.getResizedImageAsBitmap(imageUrl, 300, 300));
-//                    String pathToFile = "";
-//                    try {
-//                        pathToFile = fileOperator.writeImageToFile(appDirectory, "/quizImages", String.valueOf(quizId), resizedImage);
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                    quiz.setPathToImage(pathToFile);
-//                    updateQuiz(quiz);
-//                }
-//            }).start();
-//        }
-//    }
-//
-//    public void setPathToQuestionImageInDatabase(List<QuizQuestion> quizQuestions, final String appDirectory) {
-//        for (final QuizQuestion question : quizQuestions) {
-//            if (question.getQuestionType().equals(QuestionType.QUESTION_TEXT_IMAGE.toString())) {
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        long questionId = question.getId();
-//                        String imageUrl = question.getImageUrl();
-//                        byte[] resizedImage = imageLoader.getImageAsByteArray(imageLoader.getResizedImageAsBitmap(imageUrl, 400, 400));
-//                        String pathToFile = "";
-//                        try {
-//                            pathToFile = fileOperator.writeImageToFile(appDirectory, "/questionImages", String.valueOf(questionId), resizedImage);
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                        question.setPathToImage(pathToFile);
-//                        updateQuizQuestion(question);
-//                    }
-//                }).start();
-//            }
-//        }
-//    }
-//
-//    public void setPathToAnswerImageInDatabase(List<QuestionAnswer> answers, final String appDirectory) {
-//        for (final QuestionAnswer answer : answers) {
-//            if (answer.getAnswerType().equals(AnswerType.ANSWER_IMAGE.toString()) || answer.getAnswerType().equals(AnswerType.ANSWER_TEXT_IMAGE.toString())) {
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        long questionId = answer.getId();
-//                        String imageUrl = answer.getImageUrl();
-//                        byte[] resizedImage = imageLoader.getImageAsByteArray(imageLoader.getResizedImageAsBitmap(imageUrl, 200, 200));
-//                        String pathToFile = "";
-//                        try {
-//                            pathToFile = fileOperator.writeImageToFile(appDirectory, "/answerImages", String.valueOf(questionId), resizedImage);
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                        answer.setPathToImage(pathToFile);
-//                        updateQuestionAnswer(answer);
-//                    }
-//                }).start();
-//            }
-//        }
-//    }
-
-
-    //TODO EXECUTOR SERVICE
-//    public void setPathToQuizImageInDatabase(final List<Quiz> quizzes, final String appDirectory) {
-//        ExecutorService es = Executors.newCachedThreadPool();
-//        for(int i=0;i<availableProcessors;i++){
-//            es.execute(new Runnable() {
-//                @Override
-//                public void run() {
-//                    for (final Quiz quiz : quizzes) {
-//                        long quizId = quiz.getId();
-//                        String imageUrl = quiz.getImageUrl();
-//                        byte[] resizedImage = imageLoader.getImageAsByteArray(imageLoader.getResizedImageAsBitmap(imageUrl, 300, 300));
-//                        String pathToFile = "";
-//                        try {
-//                            pathToFile = fileOperator.writeImageToFile(appDirectory, "/quizImages", String.valueOf(quizId), resizedImage);
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                        quiz.setPathToImage(pathToFile);
-//                        updateQuiz(quiz);
-//                    }
-//                } });}
-//        es.shutdown();
-//    }
-//
-//    public void setPathToQuestionImageInDatabase(final List<QuizQuestion> quizQuestions, final String appDirectory) {
-//        ExecutorService es = Executors.newCachedThreadPool();
-//        for(int i=0;i<availableProcessors;i++){
-//            es.execute(new Runnable() {
-//                @Override
-//                public void run() {
-//                    for (final QuizQuestion question : quizQuestions) {
-//                        if (question.getQuestionType().equals(QuestionType.QUESTION_TEXT_IMAGE.toString())) {
-//                            long questionId = question.getId();
-//                            String imageUrl = question.getImageUrl();
-//                            byte[] resizedImage = imageLoader.getImageAsByteArray(imageLoader.getResizedImageAsBitmap(imageUrl, 400, 400));
-//                            String pathToFile = "";
-//                            try {
-//                                pathToFile = fileOperator.writeImageToFile(appDirectory, "/questionImages", String.valueOf(questionId), resizedImage);
-//                            } catch (IOException e) {
-//                                e.printStackTrace();
-//                            }
-//                            question.setPathToImage(pathToFile);
-//                            updateQuizQuestion(question);
-//                        }
-//                    }
-//                } });}
-//        es.shutdown();
-//    }
-//
-//    public void setPathToAnswerImageInDatabase(final List<QuestionAnswer> answers, final String appDirectory) {
-//        ExecutorService es = Executors.newCachedThreadPool();
-//        for(int i=0;i<availableProcessors;i++){
-//            es.execute(new Runnable() {
-//                @Override
-//                public void run() {
-//                    for (final QuestionAnswer answer : answers) {
-//                        if (answer.getAnswerType().equals(AnswerType.ANSWER_IMAGE.toString()) || answer.getAnswerType().equals(AnswerType.ANSWER_TEXT_IMAGE.toString())) {
-//                            long questionId = answer.getId();
-//                            String imageUrl = answer.getImageUrl();
-//                            byte[] resizedImage = imageLoader.getImageAsByteArray(imageLoader.getResizedImageAsBitmap(imageUrl, 200, 200));
-//                            String pathToFile = "";
-//                            try {
-//                                pathToFile = fileOperator.writeImageToFile(appDirectory, "/answerImages", String.valueOf(questionId), resizedImage);
-//                            } catch (IOException e) {
-//                                e.printStackTrace();
-//                            }
-//                            answer.setPathToImage(pathToFile);
-//                            updateQuestionAnswer(answer);
-//                        }
-//                    }
-//                } });}
-//        es.shutdown();
-//    }
-
-
-    //TODO bez watkow:
 
     public void setPathToQuizImageInDatabase(List<Quiz> quizzes, String appDirectory) {
         for (Quiz quiz : quizzes) {
@@ -305,7 +163,7 @@ public class DatabaseController {
             if (answer.getAnswerType().equals(AnswerType.ANSWER_IMAGE.toString()) || answer.getAnswerType().equals(AnswerType.ANSWER_TEXT_IMAGE.toString())) {
                 String imageUrl = answer.getImageUrl();
                 byte[] resizedImage = imageLoader.getImageAsByteArray(imageLoader.getResizedImageAsBitmap(imageUrl, 200, 200));
-                String pathToFile =  fileOperator.writeImageToFile(appDirectory, "/answerImages", String.valueOf(answer.getId()), resizedImage);
+                String pathToFile = fileOperator.writeImageToFile(appDirectory, "/answerImages", String.valueOf(answer.getId()), resizedImage);
                 answer.setPathToImage(pathToFile);
                 updateQuestionAnswer(answer);
             }

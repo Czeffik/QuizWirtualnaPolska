@@ -64,10 +64,10 @@ public class DataLoader {
         databaseController.setPathToAnswerImageInDatabase(questionAnswers, appDirectory);
     }
 
-    private void fetchRates(QuizDetails quizDetails){
+    private void fetchRates(QuizDetails quizDetails) {
         List<Rate> rates = quizDetails.getRates();
         List<com.trzewik.quizwirtualnapolska.db.entity.Rate> ratesToDb = new ArrayList<>();
-        for (Rate rate : rates){
+        for (Rate rate : rates) {
             com.trzewik.quizwirtualnapolska.db.entity.Rate rateDb = new com.trzewik.quizwirtualnapolska.db.entity.Rate(rate.getFrom(), rate.getTo(), rate.getContent());
             ratesToDb.add(rateDb);
         }

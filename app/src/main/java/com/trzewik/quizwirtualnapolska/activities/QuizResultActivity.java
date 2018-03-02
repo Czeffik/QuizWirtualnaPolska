@@ -1,6 +1,5 @@
 package com.trzewik.quizwirtualnapolska.activities;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -70,12 +69,11 @@ public class QuizResultActivity extends AppCompatActivity {
 
     private void populatePercentage() {
         runOnUiThread(new Runnable() {
-            @SuppressLint("SetTextI18n")
             @Override
             public void run() {
                 long quizId = getId();
-                int percent = new AnswersCalculator().getPercentageOfCorrectAnswers(quizId);
-                percentage.setText(percent + "%");
+                String percent = new AnswersCalculator().getPercentageOfCorrectAnswers(quizId) + "%";
+                percentage.setText(percent);
             }
         });
     }

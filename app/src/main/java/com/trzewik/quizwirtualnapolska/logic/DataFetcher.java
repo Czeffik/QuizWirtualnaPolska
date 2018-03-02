@@ -13,47 +13,6 @@ import java.util.logging.Logger;
 
 class DataFetcher {
     final static private Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-//TODO new Thread()
-//    Map<Long, QuizDetails> getQuizDetails(List<Item> items) {
-//        final Map<Long, QuizDetails> mapWithQuizDetails = new HashMap<>();
-//        for (final Item item : items) {
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    long itemId = item.getId();
-//                    QuizDetails quizDetails = new ApiClient().getQuizDetails(itemId, 0);
-//                    mapWithQuizDetails.put(itemId, quizDetails);
-//                }
-//            }).start();
-//        }
-//        int numberOfItems = items.size();
-//        waitFor(mapWithQuizDetails, numberOfItems);
-//        return mapWithQuizDetails;
-//    }
-
-//TODO ExecuteService
-//    Map<Long, QuizDetails> getQuizDetails(final List<Item> items) {
-//        final Map<Long, QuizDetails> mapWithQuizDetails = new HashMap<>();
-//
-//        ExecutorService es = Executors.newCachedThreadPool();
-//        int availableProcessors = Runtime.getRuntime().availableProcessors();
-//        for(int i=0;i<availableProcessors;i++) {
-//            es.execute(new Runnable() {
-//                @Override
-//                public void run() {
-//                    for (Item item : items) {
-//                        long itemId = item.getId();
-//                        QuizDetails quizDetails = new ApiClient().getQuizDetails(itemId, 0);
-//                        mapWithQuizDetails.put(itemId, quizDetails);
-//                    }
-//                }
-//            });
-//        }
-//        es.shutdown();
-//        int numberOfItems = items.size();
-//        waitFor(mapWithQuizDetails, numberOfItems);
-//        return mapWithQuizDetails;
-//    }
 
     Map<Long, QuizDetails> getQuizDetails(List<Item> items) {
         Map<Long, QuizDetails> mapWithQuizDetails = new HashMap<>();

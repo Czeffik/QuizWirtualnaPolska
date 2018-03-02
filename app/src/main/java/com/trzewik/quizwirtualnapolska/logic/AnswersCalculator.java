@@ -8,27 +8,22 @@ import java.util.List;
 public class AnswersCalculator {
 
     private DatabaseController databaseController = new DatabaseController();
-    public int getPercentageOfCorrectAnswers(long quizId){
-        return (getNumberOfCorrectAnswers(quizId)*100)/getNumberOfQuestions(quizId);
+
+    public int getPercentageOfCorrectAnswers(long quizId) {
+        return (getNumberOfCorrectAnswers(quizId) * 100) / getNumberOfQuestions(quizId);
     }
 
-    public int getPercentageProgress(long quizId){
-        int numberQuestionsWithoutAnswers = getNumberOfNotAnsweredQuestions(quizId);
-        int numberOfAllQuestions = getNumberOfQuestions(quizId);
-        return ((numberOfAllQuestions-numberQuestionsWithoutAnswers)*100)/numberOfAllQuestions;
-    }
-
-    public int getNumberOfCorrectAnswers(long quizId){
+    public int getNumberOfCorrectAnswers(long quizId) {
         List<QuizQuestion> questionsWithCorrectAnswers = databaseController.getQuestionsWithCorrectAnswers(quizId);
         return questionsWithCorrectAnswers.size();
     }
 
-    public int getNumberOfQuestions(long quizId){
+    public int getNumberOfQuestions(long quizId) {
         List<QuizQuestion> questions = databaseController.getQuestionsByQuizId(quizId);
         return questions.size();
     }
 
-    public int getNumberOfNotAnsweredQuestions(long quizId){
+    public int getNumberOfNotAnsweredQuestions(long quizId) {
         List<QuizQuestion> questions = databaseController.getNotAnsweredQuizQuestionsByQuizId(quizId);
         return questions.size();
     }

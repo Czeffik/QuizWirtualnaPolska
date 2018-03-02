@@ -10,8 +10,8 @@ public class FileOperator {
 
     private DirectoryCreator directoryCreator = new DirectoryCreator();
 
-    public String writeImageToFile(String appDirectory, String filesDirectory, String imageUniqueId, byte[] byteArray)  {
-        String pathToImage = appDirectory + filesDirectory +"/"+ imageUniqueId + ".JPEG";
+    public String writeImageToFile(String appDirectory, String filesDirectory, String imageUniqueId, byte[] byteArray) {
+        String pathToImage = appDirectory + filesDirectory + "/" + imageUniqueId + ".JPEG";
         directoryCreator.createDirectory(appDirectory, filesDirectory);
         FileOutputStream fileOutputStream = null;
         try {
@@ -20,7 +20,7 @@ public class FileOperator {
         } catch (IOException e) {
             LOGGER.info("FileOutputStream wasn't created!");
             e.printStackTrace();
-        }  finally {
+        } finally {
             try {
                 fileOutputStream.close();
             } catch (IOException | NullPointerException e) {
