@@ -24,20 +24,13 @@ android {
     productFlavors {
     }
     packagingOptions {
-        exclude 'META-INF/NOTICE' // will not include NOTICE file
-        exclude 'META-INF/LICENSE' // will not include LICENSE file
-        // as noted by @Vishnuvathsan you may also need to include
-        // variations on the file name. It depends on your dependencies.
-        // Some other common variations on notice and license file names
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
         exclude 'META-INF/notice'
         exclude 'META-INF/notice.txt'
         exclude 'META-INF/license'
         exclude 'META-INF/license.txt'
         exclude 'META-INF/DEPENDENCIES'
-    }
-    //TODO wywal to i sprawdz bledy
-    lintOptions {
-        abortOnError false
     }
 }
 
@@ -53,8 +46,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'
     testImplementation "android.arch.persistence.room:testing:1.0.0"
-    testImplementation 'org.json:json:20140107'
+    testImplementation 'org.json:json:20170516'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-
 }

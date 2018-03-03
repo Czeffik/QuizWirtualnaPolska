@@ -14,7 +14,6 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:fontFamily="@font/chela_one"
         android:textAlignment="center"
         android:textColor="@android:color/black"
         android:textSize="30sp"
@@ -31,7 +30,6 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/white"
-        android:fontFamily="@font/chela_one"
         android:textAlignment="center"
         android:textColor="@android:color/black"
         android:textSize="30sp"
@@ -59,7 +57,6 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/white"
-        android:fontFamily="@font/chela_one"
         android:textAlignment="center"
         android:textColor="@android:color/black"
         android:textSize="36sp"
@@ -86,7 +83,6 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:background="@android:color/white"
-        android:fontFamily="@font/chela_one"
         android:textAlignment="center"
         android:textColor="@android:color/black"
         android:textSize="18sp"
@@ -113,14 +109,14 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@color/colorPrimary"
-        android:fontFamily="@font/chela_one"
         android:textAlignment="center"
         android:textColor="@android:color/white"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spaceUnderAnswers" />
+        app:layout_constraintTop_toBottomOf="@+id/spaceUnderAnswers"
+        android:layout_marginLeft="8dp" />
 
     <Button
         android:id="@+id/tryAgain"
@@ -130,14 +126,14 @@
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
         android:background="@color/colorPrimary"
-        android:fontFamily="@font/chela_one"
         android:textAlignment="center"
         android:textColor="@android:color/white"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spaceUnderAnswers" />
+        app:layout_constraintTop_toBottomOf="@+id/spaceUnderAnswers"
+        android:layout_marginRight="8dp" />
 
     <Space
         android:id="@+id/spaceBetweenButtons"
@@ -149,5 +145,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tryAgain"
         app:layout_constraintStart_toEndOf="@+id/quizList"
-        app:layout_constraintTop_toBottomOf="@+id/spaceUnderAnswers" />
+        app:layout_constraintTop_toBottomOf="@+id/spaceUnderAnswers"
+        android:layout_marginRight="8dp" />
 </android.support.constraint.ConstraintLayout>
