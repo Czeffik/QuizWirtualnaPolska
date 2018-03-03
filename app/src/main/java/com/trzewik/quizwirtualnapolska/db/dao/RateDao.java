@@ -22,7 +22,7 @@ public interface RateDao {
     @Delete
     void delete(Rate rate);
 
-    @Query("SELECT * FROM rate")
-    List<Rate> getAll();
+    @Query("SELECT * FROM rate WHERE quizId = :quizId")
+    List<Rate> getAll(long quizId);
 
 }

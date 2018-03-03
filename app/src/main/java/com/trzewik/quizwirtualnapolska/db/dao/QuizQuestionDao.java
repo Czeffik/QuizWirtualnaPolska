@@ -23,20 +23,29 @@ public interface QuizQuestionDao {
     void update(QuizQuestion quizQuestion);
 
     @Delete
-    void delete (QuizQuestion quizQuestion);
+    void delete(QuizQuestion quizQuestion);
 
     @Query("SELECT * FROM quizQuestion WHERE quizId = :quizId")
     List<QuizQuestion> getQuestionsByQuizId(long quizId);
 
     @Query("SELECT * FROM quizQuestion WHERE quizId = :quizId AND answered = 0")
-    List<QuizQuestion> getNotAnsweredQuestionsByQuizId(long quizId);
+    List<QuizQuestion> getQuestionsWithoutAnswerByQuizId(long quizId);
 
     @Query("SELECT * FROM quizQuestion WHERE id = :questionId")
-    QuizQuestion getQuizQuestionByQuestionId(long questionId);
-
-    @Query("SELECT * FROM quizQuestion WHERE quizId = :quizId AND correctAnswer = 1")
-    List<QuizQuestion> getQuizQuestionsWithCorrectAnswersByQuizId(long quizId);
+    QuizQuestion getQuestionByQuestionId(long questionId);
 
     @Query("UPDATE quizQuestion SET answered = 0, correctAnswer = 0 WHERE quizId = :quizId")
-    void clearQuizAnswersByQuizId(long quizId);
+    void clearQuestionsAnswersByQuizId(long quizId);
+
+    @Query("SELECT Count(*) FROM quizQuestion WHERE quizId = :quizId")
+    int getNumberOfQuestions(long quizId);
+
+    @Query("SELECT Count(*) FROM quizQuestion WHERE quizId = :quizId AND correctAnswer = 1")
+    int getNumberOfCorrectAnswers(long quizId);
+
+    @Query("SELECT Count(*) FROM quizQuestion WHERE quizId = :quizId AND answered = 1")
+    int getNumberOfQuestionsWithAnswer(long quizId);
+
+    @Query("SELECT Count(*) FROM quizQuestion WHERE quizId = :quizId AND answered = 0")
+    int getNumberOfQuestionsWithoutAnswer(long quizId);
 }

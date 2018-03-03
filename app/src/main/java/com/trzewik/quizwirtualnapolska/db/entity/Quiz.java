@@ -15,36 +15,24 @@ public class Quiz {
     private String title;
 
     @ColumnInfo
-    private int lastResult;
-
-    @ColumnInfo
-    private int correctAnswers;
-
-    @ColumnInfo
-    private int numberOfQuestions;
-
-    @ColumnInfo
-    private String imageUrl;
-
-    @ColumnInfo
     private String pathToImage;
 
     @ColumnInfo
     private String content;
 
+    @ColumnInfo
+    private int numberOfQuestions;
+
     public Quiz() {
     }
 
     @Ignore
-    public Quiz(long id, String title, String imageUrl, String content, int numberOfQuestions) {
+    public Quiz(long id, String title, String content, int numberOfQuestions, String pathToImage) {
         this.id = id;
         this.title = title;
-        this.imageUrl = imageUrl;
         this.content = content;
         this.numberOfQuestions = numberOfQuestions;
-        this.lastResult = 0;
-        this.correctAnswers = 0;
-        this.pathToImage = "";
+        this.pathToImage = pathToImage;
     }
 
     public long getId() {
@@ -63,22 +51,6 @@ public class Quiz {
         this.title = title;
     }
 
-    public int getLastResult() {
-        return lastResult;
-    }
-
-    public void setLastResult(int lastResult) {
-        this.lastResult = lastResult;
-    }
-
-    public int getNumberOfQuestions() {
-        return numberOfQuestions;
-    }
-
-    public void setNumberOfQuestions(int numberOfQuestions) {
-        this.numberOfQuestions = numberOfQuestions;
-    }
-
     public String getPathToImage() {
         return pathToImage;
     }
@@ -95,19 +67,11 @@ public class Quiz {
         this.content = content;
     }
 
-    public int getCorrectAnswers() {
-        return correctAnswers;
+    public int getNumberOfQuestions() {
+        return numberOfQuestions;
     }
 
-    public void setCorrectAnswers(int correctAnswers) {
-        this.correctAnswers = correctAnswers;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setNumberOfQuestions(int numberOfQuestions) {
+        this.numberOfQuestions = numberOfQuestions;
     }
 }

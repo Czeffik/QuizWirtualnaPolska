@@ -1,4 +1,4 @@
-package com.trzewik.quizwirtualnapolska.model.quizDetails.question;
+package com.trzewik.quizwirtualnapolska.model.quizDetails.questionAnswers;
 
 
 import org.json.JSONException;
@@ -9,6 +9,7 @@ public class Answer {
     private int order;
     private String text;
     private int isCorrect;
+
 
     public Answer(JSONObject jsonObject) throws JSONException {
         if (jsonObject.has("image")) {

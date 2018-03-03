@@ -33,25 +33,21 @@ public class QuizQuestion {
     private String questionType;
 
     @ColumnInfo
-    private String imageUrl;
-
-    @ColumnInfo
     private String pathToImage;
 
     public QuizQuestion() {
     }
 
     @Ignore
-    public QuizQuestion(long quizId, String text, int order, long id, QuestionType questionType, String imageUrl) {
+    public QuizQuestion(long quizId, long id, String text, int order, QuestionType questionType, String pathToImage) {
         this.id = id;
         this.quizId = quizId;
         this.text = text;
         this.order = order;
         this.questionType = String.valueOf(questionType);
-        this.imageUrl = imageUrl;
         this.answered = 0;
         this.correctAnswer = 0;
-        this.pathToImage = "";
+        this.pathToImage = pathToImage;
 
     }
 
@@ -117,13 +113,5 @@ public class QuizQuestion {
 
     public void setPathToImage(String pathToImage) {
         this.pathToImage = pathToImage;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
     }
 }

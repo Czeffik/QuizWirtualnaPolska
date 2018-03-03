@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.trzewik.quizwirtualnapolska.R;
 import com.trzewik.quizwirtualnapolska.db.entity.Quiz;
+import com.trzewik.quizwirtualnapolska.logic.DatabaseController;
+import com.trzewik.quizwirtualnapolska.logic.PercentageCalculator;
 
 import java.util.List;
 
@@ -20,6 +22,8 @@ public class QuizAdapter extends ArrayAdapter<Quiz> {
 
     Context mContext;
     private List<Quiz> quizzes;
+    private DatabaseController databaseController = new DatabaseController();
+    private PercentageCalculator percentageCalculator = new PercentageCalculator();
 
 
     public QuizAdapter(List<Quiz> quizzes, Context context) {
@@ -41,7 +45,7 @@ public class QuizAdapter extends ArrayAdapter<Quiz> {
 
             convertView = inflater.inflate(R.layout.quiz_item, parent, false);
 
-            viewHolder.txtTitle = convertView.findViewById(R.id.title);
+            viewHolder.txtTitle = convertView.findViewById(R.id.rateMessage);
             viewHolder.txtDescription = convertView.findViewById(R.id.description);
             viewHolder.image = convertView.findViewById(R.id.image);
 
@@ -52,17 +56,18 @@ public class QuizAdapter extends ArrayAdapter<Quiz> {
 
         viewHolder.txtTitle.setText(quiz.getTitle());
 
-
-        if (quiz.getLastResult() == quiz.getNumberOfQuestions()) {
-            int percent = (quiz.getCorrectAnswers() * 100) / quiz.getNumberOfQuestions();
-            String textToDisplay = "Ostatni wynik: " + quiz.getCorrectAnswers() + "/" + quiz.getNumberOfQuestions() +" "+percent;
+        long quizId = quiz.getId();
+        int numberOfCorrectAnswers = databaseController.getNumberOfCorrectAnswers(quizId);
+        int numberOfResolvedQuestions = databaseController.getNumberOfQuestionsWithAnswer(quizId);
+        if (numberOfResolvedQuestions == quiz.getNumberOfQuestions()) {
+            int percent = percentageCalculator.getPercentageOfCorrectAnswers(quizId);
+            String textToDisplay = "Ostatni wynik: " + numberOfCorrectAnswers + "/" + quiz.getNumberOfQuestions() + " " + percent + "%";
             viewHolder.txtDescription.setText(textToDisplay);
-        } else if (quiz.getLastResult() > 0) {
-            int percent = (quiz.getLastResult() * 100) / quiz.getNumberOfQuestions();
+        } else if (numberOfResolvedQuestions > 0) {
+            int percent = percentageCalculator.getPercentOfQuizCompletion(quizId);
             String textToDisplay = "Quiz rozwiązany w " + percent + "%";
             viewHolder.txtDescription.setText(textToDisplay);
-        }
-        else {
+        } else {
             viewHolder.txtDescription.setText("");
         }
 

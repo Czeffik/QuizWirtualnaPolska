@@ -2,8 +2,8 @@ package com.trzewik.quizwirtualnapolska.model.quizDetails;
 
 import com.trzewik.quizwirtualnapolska.model.quizDetails.enums.AnswerType;
 import com.trzewik.quizwirtualnapolska.model.quizDetails.enums.QuestionType;
-import com.trzewik.quizwirtualnapolska.model.quizDetails.question.Answer;
-import com.trzewik.quizwirtualnapolska.model.quizDetails.question.Image;
+import com.trzewik.quizwirtualnapolska.model.quizDetails.questionAnswers.Answer;
+import com.trzewik.quizwirtualnapolska.model.quizDetails.questionAnswers.Image;
 
 import org.json.JSONArray;
 import org.json.JSONException;

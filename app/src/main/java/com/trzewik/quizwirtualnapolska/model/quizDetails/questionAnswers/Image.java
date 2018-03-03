@@ -1,4 +1,4 @@
-package com.trzewik.quizwirtualnapolska.model.quizDetails.question;
+package com.trzewik.quizwirtualnapolska.model.quizDetails.questionAnswers;
 
 
 import org.json.JSONException;

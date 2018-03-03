@@ -12,11 +12,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Item {
+public class QuizItem {
 
     private String buttonStart;
     private String shareTitle;
-    private long questions;
+    private int numberOfQuestions;
     private Date createdAt;
     private boolean sponsored;
     private List<Categories> categories;
@@ -28,7 +28,7 @@ public class Item {
     private Category category;
     private List<Tag> tags;
 
-    public Item(JSONObject jsonObject) throws JSONException, ParseException {
+    public QuizItem(JSONObject jsonObject) throws JSONException, ParseException {
         if (jsonObject.has("buttonStart")) {
             this.buttonStart = jsonObject.getString("buttonStart");
         }
@@ -36,7 +36,7 @@ public class Item {
             this.shareTitle = jsonObject.getString("shareTitle");
         }
         if (jsonObject.has("questions")) {
-            this.questions = jsonObject.getLong("questions");
+            this.numberOfQuestions = jsonObject.getInt("questions");
         }
         if (jsonObject.has("createdAt")) {
             Helper helper = new Helper();
@@ -95,8 +95,8 @@ public class Item {
         return shareTitle;
     }
 
-    public long getQuestions() {
-        return questions;
+    public int getNumberOfQuestions() {
+        return numberOfQuestions;
     }
 
     public Date getCreatedAt() {
@@ -137,13 +137,5 @@ public class Item {
 
     public List<Tag> getTags() {
         return tags;
-    }
-
-    @Override
-    public String toString() {
-        return "Item{" +
-                "title='" + title + '\'' +
-                ", category=" + category +
-                '}';
     }
 }

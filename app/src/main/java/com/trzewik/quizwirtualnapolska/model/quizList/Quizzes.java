@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Quizzes {
     private int count;
-    private List<Item> items;
+    private List<QuizItem> quizItems;
 
     public Quizzes(JSONObject jsonObject) throws JSONException, ParseException {
         if (jsonObject.has("count")){
@@ -19,12 +19,12 @@ public class Quizzes {
         }
         if (jsonObject.has("items")){
             JSONArray jsonArray = jsonObject.getJSONArray("items");
-            List<Item> listWithItems = new ArrayList<>();
+            List<QuizItem> listWithQuizItems = new ArrayList<>();
             for (int index = 0; index < jsonArray.length(); index++) {
-                Item item = new Item(jsonArray.getJSONObject(index));
-                listWithItems.add(item);
+                QuizItem quizItem = new QuizItem(jsonArray.getJSONObject(index));
+                listWithQuizItems.add(quizItem);
             }
-            this.items = listWithItems;
+            this.quizItems = listWithQuizItems;
         }
     }
 
@@ -32,7 +32,7 @@ public class Quizzes {
         return count;
     }
 
-    public List<Item> getItems() {
-        return items;
+    public List<QuizItem> getQuizItems() {
+        return quizItems;
     }
 }

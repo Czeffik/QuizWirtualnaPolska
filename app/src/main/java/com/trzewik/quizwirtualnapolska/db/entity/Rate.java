@@ -10,6 +10,8 @@ public class Rate {
     @PrimaryKey(autoGenerate = true)
     private long id;
     @ColumnInfo
+    private long quizId;
+    @ColumnInfo
     private int valueFrom;
     @ColumnInfo
     private int valueTo;
@@ -20,7 +22,8 @@ public class Rate {
     }
 
     @Ignore
-    public Rate(int valueFrom, int valueTo, String message) {
+    public Rate(long quizId, int valueFrom, int valueTo, String message) {
+        this.quizId = quizId;
         this.valueFrom = valueFrom;
         this.valueTo = valueTo;
         this.message = message;
@@ -56,5 +59,13 @@ public class Rate {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public long getQuizId() {
+        return quizId;
+    }
+
+    public void setQuizId(long quizId) {
+        this.quizId = quizId;
     }
 }

@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 class DirectoryCreator {
     final static private Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
+    //Remember that newDirectoryName should have slash, ex. newDirectoryName = "/newDirectory"
     void createDirectory(String pathToDirectory, String newDirectoryName) {
         File folder = new File(pathToDirectory + newDirectoryName);
         if (!folder.exists()) {
@@ -14,7 +15,7 @@ class DirectoryCreator {
                 LOGGER.info("Folder created!");
             } else {
                 LOGGER.info("Folder not created! Retrying...");
-                createDirectory(pathToDirectory,newDirectoryName);
+                createDirectory(pathToDirectory, newDirectoryName);
             }
         }
     }

@@ -17,8 +17,8 @@ import com.trzewik.quizwirtualnapolska.adapters.AnswerListAdapter;
 import com.trzewik.quizwirtualnapolska.db.entity.QuestionAnswer;
 import com.trzewik.quizwirtualnapolska.db.entity.Quiz;
 import com.trzewik.quizwirtualnapolska.db.entity.QuizQuestion;
-import com.trzewik.quizwirtualnapolska.logic.AnswersCalculator;
 import com.trzewik.quizwirtualnapolska.logic.DatabaseController;
+import com.trzewik.quizwirtualnapolska.logic.QuestionAnswerChecker;
 import com.trzewik.quizwirtualnapolska.model.quizDetails.enums.QuestionType;
 
 import java.util.List;
@@ -38,7 +38,7 @@ public class QuizQuestionActivity extends AppCompatActivity {
 
         listView = findViewById(R.id.list);
         questionView = findViewById(R.id.text);
-        titleView = findViewById(R.id.title);
+        titleView = findViewById(R.id.rateMessage);
         imageView = findViewById(R.id.image);
         progressBar = findViewById(R.id.progressBar);
 
@@ -96,8 +96,7 @@ public class QuizQuestionActivity extends AppCompatActivity {
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        QuestionAnswer answer = questionAnswers.get(i);
-                        databaseController.setQuestionAnswer(answer.getQuestionId(), answer.getId());
+                        new QuestionAnswerChecker().setQuestionAnswer(questionAnswers.get(i));
                         populateView();
 
                     }
@@ -110,9 +109,8 @@ public class QuizQuestionActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                AnswersCalculator answersCalculator = new AnswersCalculator();
-                int allQuestions = answersCalculator.getNumberOfQuestions(quizId);
-                int notAnsweredQuestions = answersCalculator.getNumberOfNotAnsweredQuestions(quizId);
+                int allQuestions = databaseController.getNumberOfQuestions(quizId);
+                int notAnsweredQuestions = databaseController.getNumberOfQuestionsWithoutAnswer(quizId);
                 progressBar.setMax(allQuestions);
                 progressBar.setProgress(allQuestions - notAnsweredQuestions);
             }

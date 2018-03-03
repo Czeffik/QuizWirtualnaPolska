@@ -8,15 +8,16 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.trzewik.quizwirtualnapolska.R;
-import com.trzewik.quizwirtualnapolska.logic.AnswersCalculator;
 import com.trzewik.quizwirtualnapolska.logic.DatabaseController;
+import com.trzewik.quizwirtualnapolska.logic.PercentageCalculator;
+import com.trzewik.quizwirtualnapolska.logic.RateMessageProvider;
 
 public class QuizResultActivity extends AppCompatActivity {
     private static String UNDER_TITLE_TEXT = "Odpowiedziałeś na:";
     private static String ANSWERS_TEX = "pytań";
     private static String QUIZ_LIST_BUTTON_TEXT = "Przejdź do listy quizów";
     private static String TRY_AGAIN_BUTTON_TEXT = "Rozwiąż jeszcze raz";
-    private TextView title;
+    private TextView rateMessage;
     private TextView underTitle;
     private TextView percentage;
     private TextView answersText;
@@ -29,7 +30,7 @@ public class QuizResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_result);
 
-        title = findViewById(R.id.title);
+        rateMessage = findViewById(R.id.rateMessage);
         underTitle = findViewById(R.id.underTitle);
         percentage = findViewById(R.id.correctAnswersPercent);
         answersText = findViewById(R.id.answersText);
@@ -41,7 +42,7 @@ public class QuizResultActivity extends AppCompatActivity {
     }
 
     private void populateView() {
-        populateTitle();
+        populateRateMessage();
         populateUnderTitle();
         populatePercentage();
         populateAnswers();
@@ -49,11 +50,14 @@ public class QuizResultActivity extends AppCompatActivity {
         populateQuizListButton();
     }
 
-    private void populateTitle() {
+    private void populateRateMessage() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                title.setText(databaseController.getRateMessage(new AnswersCalculator().getPercentageOfCorrectAnswers(getId())));
+                long quizId = getId();
+                int percentageOfCorrectAnswers = new PercentageCalculator().getPercentageOfCorrectAnswers(getId());
+                String message = new RateMessageProvider().getRateMessage(quizId, percentageOfCorrectAnswers);
+                rateMessage.setText(message);
             }
         });
     }
@@ -72,7 +76,7 @@ public class QuizResultActivity extends AppCompatActivity {
             @Override
             public void run() {
                 long quizId = getId();
-                String percent = new AnswersCalculator().getPercentageOfCorrectAnswers(quizId) + "%";
+                String percent = new PercentageCalculator().getPercentageOfCorrectAnswers(quizId) + "%";
                 percentage.setText(percent);
             }
         });

@@ -17,7 +17,7 @@ import com.trzewik.quizwirtualnapolska.App;
 import com.trzewik.quizwirtualnapolska.R;
 import com.trzewik.quizwirtualnapolska.adapters.QuizAdapter;
 import com.trzewik.quizwirtualnapolska.db.entity.Quiz;
-import com.trzewik.quizwirtualnapolska.logic.DataLoader;
+import com.trzewik.quizwirtualnapolska.logic.DataRetriever;
 import com.trzewik.quizwirtualnapolska.logic.DatabaseController;
 
 import java.util.List;
@@ -52,9 +52,9 @@ public class QuizListActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                List<Quiz> quizzes = databaseController.getQuizListFromDb();
+                List<Quiz> quizzes = databaseController.getAllQuizzes();
                 if (App.get().isForceUpdate() || quizzes.isEmpty()) {
-                    new DataLoader().retrieveData(getApplicationInfo().dataDir, startIndex, maxResult);
+                    new DataRetriever(getApplicationInfo().dataDir, startIndex, maxResult).retrieveData();
                     populateQuizList();
                 } else {
                     populateQuizList();
@@ -67,12 +67,12 @@ public class QuizListActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                QuizAdapter quizAdapter = new QuizAdapter(databaseController.getQuizListFromDb(), getApplicationContext());
+                QuizAdapter quizAdapter = new QuizAdapter(databaseController.getAllQuizzes(), getApplicationContext());
                 listView.setAdapter(quizAdapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        List<Quiz> quizzes = databaseController.getQuizListFromDb();
+                        List<Quiz> quizzes = databaseController.getAllQuizzes();
                         Quiz quiz = quizzes.get(position);
                         Intent intent = new Intent(QuizListActivity.this, QuizQuestionActivity.class);
                         intent.putExtras(setBundle(quiz.getId()));

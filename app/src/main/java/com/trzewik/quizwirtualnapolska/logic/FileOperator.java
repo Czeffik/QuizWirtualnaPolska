@@ -1,8 +1,9 @@
 package com.trzewik.quizwirtualnapolska.logic;
 
 
+import android.graphics.Bitmap;
+
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.logging.Logger;
 
 public class FileOperator {
@@ -10,23 +11,18 @@ public class FileOperator {
 
     private DirectoryCreator directoryCreator = new DirectoryCreator();
 
-    public String writeImageToFile(String appDirectory, String filesDirectory, String imageUniqueId, byte[] byteArray) {
-        String pathToImage = appDirectory + filesDirectory + "/" + imageUniqueId + ".JPEG";
+    public String getPathToImage(String appDirectory, String filesDirectory, long imageUniqueId) {
         directoryCreator.createDirectory(appDirectory, filesDirectory);
-        FileOutputStream fileOutputStream = null;
+        return appDirectory + filesDirectory + "/" + imageUniqueId + ".JPEG";
+    }
+
+    public void writeImageToFile(Bitmap image, String pathToImage) {
         try {
-            fileOutputStream = new FileOutputStream(pathToImage);
-            fileOutputStream.write(byteArray);
-        } catch (IOException e) {
-            LOGGER.info("FileOutputStream wasn't created!");
-            e.printStackTrace();
-        } finally {
-            try {
-                fileOutputStream.close();
-            } catch (IOException | NullPointerException e) {
-                LOGGER.info("FileOutputStream wasn't closed!");
-            }
+            FileOutputStream fos = new FileOutputStream(pathToImage);
+            image.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.close();
+        } catch (Exception e) {
+            LOGGER.info("Error when saving to internal storage! Error message: \n" + e.getMessage());
         }
-        return pathToImage;
     }
 }

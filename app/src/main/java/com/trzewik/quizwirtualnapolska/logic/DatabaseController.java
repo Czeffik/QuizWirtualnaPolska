@@ -10,8 +10,6 @@ import com.trzewik.quizwirtualnapolska.db.entity.QuestionAnswer;
 import com.trzewik.quizwirtualnapolska.db.entity.Quiz;
 import com.trzewik.quizwirtualnapolska.db.entity.QuizQuestion;
 import com.trzewik.quizwirtualnapolska.db.entity.Rate;
-import com.trzewik.quizwirtualnapolska.model.quizDetails.enums.AnswerType;
-import com.trzewik.quizwirtualnapolska.model.quizDetails.enums.QuestionType;
 
 import java.util.List;
 
@@ -25,27 +23,19 @@ public class DatabaseController {
     private QuestionAnswerDao answerTable = database.questionAnswerDao();
     private RateDao rateTable = database.rateDao();
 
-    private ImageLoader imageLoader = new ImageLoader();
-    private FileOperator fileOperator = new FileOperator();
-
-    public void insertRatesListToDatabase(List<Rate> rates) {
-        rateTable.insertAll(rates);
+    public void clearQuizAnswers(long quizId) {
+        questionTable.clearQuestionsAnswersByQuizId(quizId);
     }
 
-    public List<Rate> getAllRates() {
-        return rateTable.getAll();
+
+    public List<QuizQuestion> getNotAnsweredQuizQuestionsByQuizId(long quizId) {
+        return questionTable.getQuestionsWithoutAnswerByQuizId(quizId);
     }
 
-    public String getRateMessage(int result) {
-        List<Rate> rates = getAllRates();
-        String message = null;
-        for (Rate rate : rates) {
-            if (result >= rate.getValueFrom() && result <= rate.getValueTo()) {
-                message = rate.getMessage();
-            }
-        }
-        return message;
+    public List<QuestionAnswer> getQuizAnswerByQuestionId(long questionId) {
+        return answerTable.getAnswersByQuestionId(questionId);
     }
+
 
     public void updateQuiz(Quiz quiz) {
         quizTable.update(quiz);
@@ -59,64 +49,62 @@ public class DatabaseController {
         answerTable.update(questionAnswer);
     }
 
-    public int getNumberOfQuizzes() {
-        return quizTable.getNumberOfRows();
+
+    public int getNumberOfCorrectAnswers(long quizId) {
+        return questionTable.getNumberOfCorrectAnswers(quizId);
     }
 
-    public List<Quiz> getQuizListFromDb() {
-        return quizTable.getAll();
+    public int getNumberOfQuestionsWithoutAnswer(long quizId) {
+        return questionTable.getNumberOfQuestionsWithoutAnswer(quizId);
     }
 
-    public List<QuizQuestion> getNotAnsweredQuizQuestionsByQuizId(long quizId) {
-        return questionTable.getNotAnsweredQuestionsByQuizId(quizId);
+    public int getNumberOfQuestionsWithAnswer(long quizId) {
+        return questionTable.getNumberOfQuestionsWithAnswer(quizId);
     }
+
+    public List<QuizQuestion> getQuizQuestionsByQuizId(long quizId) {
+        return questionTable.getQuestionsByQuizId(quizId);
+    }
+
 
     public Quiz getQuizById(long id) {
         return quizTable.getQuizById(id);
     }
 
-    public List<QuestionAnswer> getQuizAnswerByQuestionId(long id) {
-        return answerTable.getAnswersByQuestionId(id);
+    public QuizQuestion getQuizQuestionById(long id) {
+        return questionTable.getQuestionByQuestionId(id);
     }
 
-    public void setQuestionAnswer(long quizQuestionId, long answerId) {
-        QuizQuestion quizQuestion = getQuizQuestionByQuestionId(quizQuestionId);
-        Quiz quiz = getQuizById(quizQuestion.getQuizId());
-        QuestionAnswer questionAnswer = getAnswerByAnswerId(answerId);
-        if (questionAnswer.getIsCorrect() == 1) {
-            quizQuestion.setCorrectAnswer(1);
-            quiz.setCorrectAnswers(quiz.getCorrectAnswers() + 1);
-        } else {
-            quizQuestion.setCorrectAnswer(0);
-        }
-        quizQuestion.setAnswered(1);
-        quiz.setLastResult(quiz.getLastResult() + 1);
-        quizTable.update(quiz);
-        questionTable.update(quizQuestion);
+    public QuestionAnswer getAnswerById(long id) {
+        return answerTable.getQuestionAnswerByAnswerId(id);
     }
 
-    public void clearQuizAnswers(long quizId) {
-        Quiz quiz = getQuizById(quizId);
-        quiz.setCorrectAnswers(0);
-        quiz.setLastResult(0);
-        quizTable.update(quiz);
-        questionTable.clearQuizAnswersByQuizId(quizId);
+
+    public List<Rate> getAllRates(long quizId) {
+        return rateTable.getAll(quizId);
     }
 
-    public List<QuizQuestion> getQuestionsWithCorrectAnswers(long quizId) {
-        return questionTable.getQuizQuestionsWithCorrectAnswersByQuizId(quizId);
+    public List<Quiz> getAllQuizzes() {
+        return quizTable.getAll();
     }
 
-    public List<QuizQuestion> getQuestionsByQuizId(long quizId) {
-        return questionTable.getQuestionsByQuizId(quizId);
+
+    public int getNumberOfAnswers(long questionId) {
+        return answerTable.getNumberOfAnswers(questionId);
     }
 
-    public QuizQuestion getQuizQuestionByQuestionId(long questionId) {
-        return questionTable.getQuizQuestionByQuestionId(questionId);
+    public int getNumberOfQuestions(long quizId) {
+        return questionTable.getNumberOfQuestions(quizId);
     }
 
-    public QuestionAnswer getAnswerByAnswerId(long answerId) {
-        return answerTable.getQuestionAnswerByAnswerId(answerId);
+    public int getNumberOfQuizzes() {
+        return quizTable.getNumberOfRows();
+    }
+
+
+    public void insertRatesListToDatabase(List<Rate> rates) {
+        rateTable.insertAll(rates);
+        app.setForceUpdate(false);
     }
 
     public void insertQuizListToDatabase(List<Quiz> quizzes) {
@@ -132,41 +120,5 @@ public class DatabaseController {
     public void insertQuestionAnswerListToDatabase(List<QuestionAnswer> questionAnswers) {
         answerTable.insertAll(questionAnswers);
         app.setForceUpdate(false);
-    }
-
-    public void setPathToQuizImageInDatabase(List<Quiz> quizzes, String appDirectory) {
-        for (Quiz quiz : quizzes) {
-            long quizId = quiz.getId();
-            String imageUrl = quiz.getImageUrl();
-            byte[] resizedImage = imageLoader.getImageAsByteArray(imageLoader.getResizedImageAsBitmap(imageUrl, 300, 300));
-            String pathToFile = fileOperator.writeImageToFile(appDirectory, "/quizImages", String.valueOf(quizId), resizedImage);
-            quiz.setPathToImage(pathToFile);
-            updateQuiz(quiz);
-        }
-    }
-
-    public void setPathToQuestionImageInDatabase(List<QuizQuestion> quizQuestions, String appDirectory) {
-        for (QuizQuestion question : quizQuestions) {
-            if (question.getQuestionType().equals(QuestionType.QUESTION_TEXT_IMAGE.toString())) {
-                long questionId = question.getId();
-                String imageUrl = question.getImageUrl();
-                byte[] resizedImage = imageLoader.getImageAsByteArray(imageLoader.getResizedImageAsBitmap(imageUrl, 400, 400));
-                String pathToFile = fileOperator.writeImageToFile(appDirectory, "/questionImages", String.valueOf(questionId), resizedImage);
-                question.setPathToImage(pathToFile);
-                updateQuizQuestion(question);
-            }
-        }
-    }
-
-    public void setPathToAnswerImageInDatabase(List<QuestionAnswer> answers, String appDirectory) {
-        for (QuestionAnswer answer : answers) {
-            if (answer.getAnswerType().equals(AnswerType.ANSWER_IMAGE.toString()) || answer.getAnswerType().equals(AnswerType.ANSWER_TEXT_IMAGE.toString())) {
-                String imageUrl = answer.getImageUrl();
-                byte[] resizedImage = imageLoader.getImageAsByteArray(imageLoader.getResizedImageAsBitmap(imageUrl, 200, 200));
-                String pathToFile = fileOperator.writeImageToFile(appDirectory, "/answerImages", String.valueOf(answer.getId()), resizedImage);
-                answer.setPathToImage(pathToFile);
-                updateQuestionAnswer(answer);
-            }
-        }
     }
 }

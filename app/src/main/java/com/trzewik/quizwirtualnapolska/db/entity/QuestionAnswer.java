@@ -17,13 +17,13 @@ public class QuestionAnswer {
     private long questionId;
 
     @ColumnInfo
+    private int order;
+
+    @ColumnInfo
     private String text;
 
     @ColumnInfo
     private int isCorrect;
-
-    @ColumnInfo
-    private String imageUrl;
 
     @ColumnInfo
     private String pathToImage;
@@ -35,14 +35,14 @@ public class QuestionAnswer {
     }
 
     @Ignore
-    public QuestionAnswer(long id, String text, int isCorrect, String imageUrl, long questionId, AnswerType answerType) {
+    public QuestionAnswer(long id, long questionId, String text, int isCorrect, AnswerType answerType, int order, String pathToImage) {
         this.id = id;
         this.text = text;
         this.isCorrect = isCorrect;
         this.questionId = questionId;
         this.answerType = String.valueOf(answerType);
-        this.imageUrl = imageUrl;
-        this.pathToImage = "";
+        this.order = order;
+        this.pathToImage = pathToImage;
     }
 
     public long getId() {
@@ -93,11 +93,11 @@ public class QuestionAnswer {
         this.answerType = answerType;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public int getOrder() {
+        return order;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setOrder(int order) {
+        this.order = order;
     }
 }
