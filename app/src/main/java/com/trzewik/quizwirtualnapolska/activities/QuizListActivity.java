@@ -100,7 +100,7 @@ public class QuizListActivity extends AppCompatActivity {
         });
     }
 
-    private void populateAlertDialog(String title, String message) {
+    private void populateAlertDialog(String title, final String message) {
         AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
@@ -111,7 +111,9 @@ public class QuizListActivity extends AppCompatActivity {
                 .setMessage(message)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        finish();
+                        if (message.equals(QuizListActivityProperties.firstRun)) {
+                            finish();
+                        }
                     }
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
