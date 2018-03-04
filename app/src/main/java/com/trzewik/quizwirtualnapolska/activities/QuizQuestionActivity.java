@@ -3,10 +3,14 @@ package com.trzewik.quizwirtualnapolska.activities;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -101,7 +105,6 @@ public class QuizQuestionActivity extends AppCompatActivity {
                         preventDoubleClick();
                         new QuestionAnswerChecker().setQuestionAnswer(questionAnswers.get(i));
                         populateView();
-
                     }
                 });
             }

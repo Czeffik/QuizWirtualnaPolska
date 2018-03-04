@@ -75,14 +75,14 @@ public class DataLoader {
         List<Question> questions = quizDetails.getQuestions();
         List<QuizQuestion> quizQuestions = new ArrayList<>();
         for (Question question : questions) {
-            long questionId = UUID.randomUUID().getMostSignificantBits();
+            long questionId = Math.abs(UUID.randomUUID().getMostSignificantBits());
             String text = question.getText();
             int order = question.getOrder();
             QuestionType questionType = question.getType();
             String imageUrl = question.getImage().getUrl();
             String pathToImage = "";
             if (questionType == QUESTION_TEXT_IMAGE) {
-                pathToImage = saveImageToFile(appDirectory, imageUrl, "/questionsImages", questionId, 400, 400);
+                pathToImage = saveImageToFile(appDirectory, imageUrl, "/questionsImages", questionId, 450, 350);
             }
             QuizQuestion quizQuestion = new QuizQuestion(quizId, questionId, text, order, questionType, pathToImage);
             quizQuestions.add(quizQuestion);
@@ -95,7 +95,7 @@ public class DataLoader {
         List<Answer> answers = question.getAnswers();
         List<QuestionAnswer> questionAnswers = new ArrayList<>();
         for (Answer answer : answers) {
-            long answerId = UUID.randomUUID().getMostSignificantBits();
+            long answerId = Math.abs(UUID.randomUUID().getMostSignificantBits());
             String text = answer.getText();
             int isCorrect = answer.isCorrect();
             AnswerType answerType = question.getAnswer();
