@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:backgroundTint="@android:color/white"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.trzewik.quizwirtualnapolska.activities.QuizListActivity">
 
@@ -19,15 +18,15 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
         android:background="@android:color/white"
-        android:backgroundTint="@android:color/white"
-        android:stateListAnimator="@android:color/white"
         android:textAlignment="center"
         android:textStyle="bold"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.485"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="8dp" />
 
     <ListView
         android:id="@+id/list"

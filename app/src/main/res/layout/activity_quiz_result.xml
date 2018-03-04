@@ -126,7 +126,8 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spaceUnderAnswers" />
+        app:layout_constraintTop_toBottomOf="@+id/spaceUnderAnswers"
+        android:layout_marginLeft="8dp" />
 
     <Button
         android:id="@+id/tryAgain"
@@ -141,6 +142,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spaceUnderAnswers" />
+        app:layout_constraintTop_toBottomOf="@+id/spaceUnderAnswers"
+        android:layout_marginRight="8dp" />
 
 </android.support.constraint.ConstraintLayout>
