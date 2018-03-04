@@ -23,6 +23,7 @@ import com.trzewik.quizwirtualnapolska.adapters.QuizAdapter;
 import com.trzewik.quizwirtualnapolska.db.entity.Quiz;
 import com.trzewik.quizwirtualnapolska.logic.DataGainer;
 import com.trzewik.quizwirtualnapolska.logic.DatabaseController;
+import com.trzewik.quizwirtualnapolska.properties.QuizListActivityProperties;
 
 import java.util.List;
 
@@ -32,6 +33,7 @@ import static com.trzewik.quizwirtualnapolska.properties.QuizListActivityPropert
 import static com.trzewik.quizwirtualnapolska.properties.QuizListActivityProperties.buttonText;
 import static com.trzewik.quizwirtualnapolska.properties.QuizListActivityProperties.firstRun;
 import static com.trzewik.quizwirtualnapolska.properties.QuizListActivityProperties.information;
+import static com.trzewik.quizwirtualnapolska.properties.QuizListActivityProperties.internetConnectionRequired;
 
 public class QuizListActivity extends AppCompatActivity {
     private long lastClickTime = 0;
@@ -53,7 +55,7 @@ public class QuizListActivity extends AppCompatActivity {
         if (isOnline() || databaseController.getNumberOfQuizzes() > 0) {
             new FirstRunLoader().execute();
         } else {
-            populateAlertDialog();
+            populateAlertDialog(information, firstRun);
         }
     }
 
@@ -88,20 +90,25 @@ public class QuizListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 preventDoubleClick();
-                new ExtraQuizLoader().execute();
+                if (isOnline()) {
+                    new ExtraQuizLoader().execute();
+                }
+                else{
+                    populateAlertDialog(information, internetConnectionRequired);
+                }
             }
         });
     }
 
-    private void populateAlertDialog() {
+    private void populateAlertDialog(String title, String message) {
         AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
         } else {
             builder = new AlertDialog.Builder(this);
         }
-        builder.setTitle(information)
-                .setMessage(firstRun)
+        builder.setTitle(title)
+                .setMessage(message)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         finish();

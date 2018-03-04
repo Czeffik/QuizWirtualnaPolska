@@ -51,6 +51,7 @@ public class QuizAdapter extends ArrayAdapter<Quiz> {
             viewHolder.txtTitle = convertView.findViewById(R.id.quizTitle);
             viewHolder.txtDescription = convertView.findViewById(R.id.quizResults);
             viewHolder.image = convertView.findViewById(R.id.image);
+            viewHolder.txtPercentage = convertView.findViewById(R.id.quizResultsPercent);
 
             convertView.setTag(viewHolder);
         } else {
@@ -64,14 +65,17 @@ public class QuizAdapter extends ArrayAdapter<Quiz> {
         int numberOfResolvedQuestions = databaseController.getNumberOfQuestionsWithAnswer(quizId);
         if (numberOfResolvedQuestions == quiz.getNumberOfQuestions()) {
             int percent = percentageCalculator.getPercentageOfCorrectAnswers(quizId);
-            String textToDisplay = lastResult + numberOfCorrectAnswers + "/" + quiz.getNumberOfQuestions() + " " + percent + "%";
+            String textToDisplay = lastResult + numberOfCorrectAnswers + "/" + quiz.getNumberOfQuestions();
+            String percentToDisplay = percent + "%";
             viewHolder.txtDescription.setText(textToDisplay);
+            viewHolder.txtPercentage.setText(percentToDisplay);
         } else if (numberOfResolvedQuestions > 0) {
             int percent = percentageCalculator.getPercentOfQuizCompletion(quizId);
             String textToDisplay = quizCompletedIn + percent + "%";
             viewHolder.txtDescription.setText(textToDisplay);
         } else {
             viewHolder.txtDescription.setText("");
+            viewHolder.txtPercentage.setText("");
         }
 
         Bitmap bMap = BitmapFactory.decodeFile(quiz.getPathToImage());
@@ -83,6 +87,7 @@ public class QuizAdapter extends ArrayAdapter<Quiz> {
     private static class ViewHolder {
         TextView txtTitle;
         TextView txtDescription;
+        TextView txtPercentage;
         ImageView image;
     }
 }
