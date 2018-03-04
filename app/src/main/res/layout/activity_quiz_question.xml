@@ -9,7 +9,7 @@
     tools:context="com.trzewik.quizwirtualnapolska.activities.QuizQuestionActivity">
 
     <TextView
-        android:id="@+id/rateMessage"
+        android:id="@+id/quizTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -54,7 +54,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rateMessage" />
+        app:layout_constraintTop_toBottomOf="@+id/quizTitle" />
 
     <Space
         android:id="@+id/spaceUnderTitle"
@@ -64,7 +64,7 @@
         android:layout_marginStart="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rateMessage" />
+        app:layout_constraintTop_toBottomOf="@+id/quizTitle" />
 
     <Space
         android:id="@+id/spaceUnderProgressBar"

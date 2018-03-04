@@ -6,40 +6,53 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
-import com.trzewik.quizwirtualnapolska.App;
 import com.trzewik.quizwirtualnapolska.R;
 import com.trzewik.quizwirtualnapolska.adapters.QuizAdapter;
 import com.trzewik.quizwirtualnapolska.db.entity.Quiz;
 import com.trzewik.quizwirtualnapolska.logic.DataGainer;
 import com.trzewik.quizwirtualnapolska.logic.DatabaseController;
+import com.trzewik.quizwirtualnapolska.stringProviders.QuizListActivityProperties;
 
 import java.util.List;
 
+import static com.trzewik.quizwirtualnapolska.stringProviders.QuizListActivityProperties.BUTTON_ACTION_NUMBER_OF_QUIZZES;
+import static com.trzewik.quizwirtualnapolska.stringProviders.QuizListActivityProperties.INITIAL_NUMBER_OF_QUIZZES;
+import static com.trzewik.quizwirtualnapolska.stringProviders.QuizListActivityProperties.START_INDEX;
+import static com.trzewik.quizwirtualnapolska.stringProviders.QuizListActivityProperties.buttonText;
+import static com.trzewik.quizwirtualnapolska.stringProviders.QuizListActivityProperties.firstRun;
+import static com.trzewik.quizwirtualnapolska.stringProviders.QuizListActivityProperties.information;
+
 public class QuizListActivity extends AppCompatActivity {
-    private static int START_INDEX = 0;
-    private static int MAX_RESULT = 5;
+    private long lastClickTime = 0;
 
     private ListView listView;
     private Button button;
+    private ProgressBar progressBar;
     private DatabaseController databaseController = new DatabaseController();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_list);
+
         listView = findViewById(R.id.list);
         button = findViewById(R.id.button);
+        progressBar = findViewById(R.id.progressbar);
 
         if (isOnline() || databaseController.getNumberOfQuizzes() > 0) {
-            insertAndDisplayData(START_INDEX, MAX_RESULT);
+            new FirstRunLoader().execute();
         } else {
             populateAlertDialog();
         }
@@ -51,57 +64,35 @@ public class QuizListActivity extends AppCompatActivity {
         populateQuizList();
     }
 
-    private void insertAndDisplayData(final int startIndex, final int maxResult) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                List<Quiz> quizzes = databaseController.getAllQuizzes();
-                if (App.get().isForceUpdate() || quizzes.isEmpty()) {
-                    new DataGainer().retrieveData(getApplicationInfo().dataDir, startIndex, maxResult);
-                    populateQuizList();
-                } else {
-                    populateQuizList();
-                }
-            }
-        }).start();
-    }
-
     private void populateQuizList() {
-        runOnUiThread(new Runnable() {
+        listView.setVisibility(View.VISIBLE);
+        QuizAdapter quizAdapter = new QuizAdapter(databaseController.getAllQuizzes(), getApplicationContext());
+        listView.setAdapter(quizAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void run() {
-                QuizAdapter quizAdapter = new QuizAdapter(databaseController.getAllQuizzes(), getApplicationContext());
-                listView.setAdapter(quizAdapter);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        List<Quiz> quizzes = databaseController.getAllQuizzes();
-                        Quiz quiz = quizzes.get(position);
-                        Intent intent = new Intent(QuizListActivity.this, QuizQuestionActivity.class);
-                        intent.putExtras(setBundle(quiz.getId()));
-                        startActivity(intent);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                preventDoubleClick();
+                List<Quiz> quizzes = databaseController.getAllQuizzes();
+                Quiz quiz = quizzes.get(position);
+                Intent intent = new Intent(QuizListActivity.this, QuizQuestionActivity.class);
+                intent.putExtras(setBundle(quiz.getId()));
+                startActivity(intent);
 
-                    }
-                });
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        fetchExtraQuizzes();
-                    }
-                });
             }
         });
     }
 
-    private void fetchExtraQuizzes(){
-        new Thread(new Runnable() {
+    private void populateButton(){
+        button.setText(buttonText);
+        button.setVisibility(View.VISIBLE);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
-                new DataGainer().fetchNewQuizzes(getApplicationInfo().dataDir, MAX_RESULT);
+            public void onClick(View view) {
+                preventDoubleClick();
+                new ExtraQuizLoader().execute();
             }
-        }).start();
+        });
     }
-
 
     private void populateAlertDialog() {
         AlertDialog.Builder builder;
@@ -110,8 +101,8 @@ public class QuizListActivity extends AppCompatActivity {
         } else {
             builder = new AlertDialog.Builder(this);
         }
-        builder.setTitle("Informacja")
-                .setMessage("Przy pierwszym uruchomieniu wymagany jest dostęp do internetu! Jeśli chcesz korzystać z aplikacji włącz Internet i spróbuj ponownie.")
+        builder.setTitle(information)
+                .setMessage(firstRun)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
@@ -132,5 +123,62 @@ public class QuizListActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putLong("id", id);
         return bundle;
+    }
+
+    private void preventDoubleClick() {
+        if (SystemClock.elapsedRealtime() - lastClickTime < 1000) {
+            return;
+        }
+        lastClickTime = SystemClock.elapsedRealtime();
+    }
+
+    private class FirstRunLoader extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... param) {
+            if (databaseController.getNumberOfQuizzes() == 0) {
+                new DataGainer().retrieveData(getApplicationInfo().dataDir, START_INDEX, INITIAL_NUMBER_OF_QUIZZES);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            listView.setVisibility(View.INVISIBLE);
+            button.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            progressBar.setVisibility(View.INVISIBLE);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            populateQuizList();
+            populateButton();
+        }
+    }
+
+    private class ExtraQuizLoader extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... param) {
+            new DataGainer().fetchNewQuizzes(getApplicationInfo().dataDir, BUTTON_ACTION_NUMBER_OF_QUIZZES);
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressBar.setVisibility(View.VISIBLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            progressBar.setVisibility(View.INVISIBLE);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            populateQuizList();
+            populateButton();
+        }
     }
 }

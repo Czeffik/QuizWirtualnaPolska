@@ -30,7 +30,7 @@ public class QuizResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_result);
 
-        rateMessage = findViewById(R.id.rateMessage);
+        rateMessage = findViewById(R.id.quizTitle);
         underTitle = findViewById(R.id.underTitle);
         percentage = findViewById(R.id.correctAnswersPercent);
         answersText = findViewById(R.id.answersText);

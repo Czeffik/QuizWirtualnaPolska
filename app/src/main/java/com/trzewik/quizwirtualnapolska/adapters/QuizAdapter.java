@@ -17,6 +17,9 @@ import com.trzewik.quizwirtualnapolska.logic.PercentageCalculator;
 
 import java.util.List;
 
+import static com.trzewik.quizwirtualnapolska.stringProviders.QuizListActivityProperties.lastResult;
+import static com.trzewik.quizwirtualnapolska.stringProviders.QuizListActivityProperties.quizCompletedIn;
+
 
 public class QuizAdapter extends ArrayAdapter<Quiz> {
 
@@ -45,8 +48,8 @@ public class QuizAdapter extends ArrayAdapter<Quiz> {
 
             convertView = inflater.inflate(R.layout.quiz_item, parent, false);
 
-            viewHolder.txtTitle = convertView.findViewById(R.id.rateMessage);
-            viewHolder.txtDescription = convertView.findViewById(R.id.description);
+            viewHolder.txtTitle = convertView.findViewById(R.id.quizTitle);
+            viewHolder.txtDescription = convertView.findViewById(R.id.quizResults);
             viewHolder.image = convertView.findViewById(R.id.image);
 
             convertView.setTag(viewHolder);
@@ -61,11 +64,11 @@ public class QuizAdapter extends ArrayAdapter<Quiz> {
         int numberOfResolvedQuestions = databaseController.getNumberOfQuestionsWithAnswer(quizId);
         if (numberOfResolvedQuestions == quiz.getNumberOfQuestions()) {
             int percent = percentageCalculator.getPercentageOfCorrectAnswers(quizId);
-            String textToDisplay = "Ostatni wynik: " + numberOfCorrectAnswers + "/" + quiz.getNumberOfQuestions() + " " + percent + "%";
+            String textToDisplay = lastResult + numberOfCorrectAnswers + "/" + quiz.getNumberOfQuestions() + " " + percent + "%";
             viewHolder.txtDescription.setText(textToDisplay);
         } else if (numberOfResolvedQuestions > 0) {
             int percent = percentageCalculator.getPercentOfQuizCompletion(quizId);
-            String textToDisplay = "Quiz rozwiązany w " + percent + "%";
+            String textToDisplay = quizCompletedIn + percent + "%";
             viewHolder.txtDescription.setText(textToDisplay);
         } else {
             viewHolder.txtDescription.setText("");

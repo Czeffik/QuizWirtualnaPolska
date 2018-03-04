@@ -38,7 +38,7 @@ public class QuizQuestionActivity extends AppCompatActivity {
 
         listView = findViewById(R.id.list);
         questionView = findViewById(R.id.text);
-        titleView = findViewById(R.id.rateMessage);
+        titleView = findViewById(R.id.quizTitle);
         imageView = findViewById(R.id.image);
         progressBar = findViewById(R.id.progressBar);
 
