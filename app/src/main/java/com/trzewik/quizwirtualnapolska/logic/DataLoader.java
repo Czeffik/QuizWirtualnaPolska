@@ -58,7 +58,7 @@ public class DataLoader {
                     String imageUrl = quizItem.getMainPhoto().getUrl();
                     String content = quizItem.getContent();
                     int numberOfQuestions = quizItem.getNumberOfQuestions();
-                    String pathToImage = saveImageToFile(appDirectory, imageUrl, "/quizImages", quizItemId, 400, 300);
+                    String pathToImage = saveImageToFile(appDirectory, imageUrl, "/quizImages", quizItemId, 240, 180);
                     Quiz quiz = new Quiz(quizItemId, title, content, numberOfQuestions, pathToImage);
                     quizzes.add(quiz);
                     fetchQuizDetailsAndQuizAnswers(appDirectory, quizItemId);
