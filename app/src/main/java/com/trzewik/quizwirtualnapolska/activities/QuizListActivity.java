@@ -23,16 +23,15 @@ import com.trzewik.quizwirtualnapolska.adapters.QuizAdapter;
 import com.trzewik.quizwirtualnapolska.db.entity.Quiz;
 import com.trzewik.quizwirtualnapolska.logic.DataGainer;
 import com.trzewik.quizwirtualnapolska.logic.DatabaseController;
-import com.trzewik.quizwirtualnapolska.stringProviders.QuizListActivityProperties;
 
 import java.util.List;
 
-import static com.trzewik.quizwirtualnapolska.stringProviders.QuizListActivityProperties.BUTTON_ACTION_NUMBER_OF_QUIZZES;
-import static com.trzewik.quizwirtualnapolska.stringProviders.QuizListActivityProperties.INITIAL_NUMBER_OF_QUIZZES;
-import static com.trzewik.quizwirtualnapolska.stringProviders.QuizListActivityProperties.START_INDEX;
-import static com.trzewik.quizwirtualnapolska.stringProviders.QuizListActivityProperties.buttonText;
-import static com.trzewik.quizwirtualnapolska.stringProviders.QuizListActivityProperties.firstRun;
-import static com.trzewik.quizwirtualnapolska.stringProviders.QuizListActivityProperties.information;
+import static com.trzewik.quizwirtualnapolska.properties.QuizListActivityProperties.BUTTON_ACTION_NUMBER_OF_QUIZZES;
+import static com.trzewik.quizwirtualnapolska.properties.QuizListActivityProperties.INITIAL_NUMBER_OF_QUIZZES;
+import static com.trzewik.quizwirtualnapolska.properties.QuizListActivityProperties.START_INDEX;
+import static com.trzewik.quizwirtualnapolska.properties.QuizListActivityProperties.buttonText;
+import static com.trzewik.quizwirtualnapolska.properties.QuizListActivityProperties.firstRun;
+import static com.trzewik.quizwirtualnapolska.properties.QuizListActivityProperties.information;
 
 public class QuizListActivity extends AppCompatActivity {
     private long lastClickTime = 0;

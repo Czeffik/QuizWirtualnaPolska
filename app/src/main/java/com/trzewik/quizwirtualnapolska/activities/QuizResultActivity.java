@@ -2,6 +2,7 @@ package com.trzewik.quizwirtualnapolska.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -12,11 +13,14 @@ import com.trzewik.quizwirtualnapolska.logic.DatabaseController;
 import com.trzewik.quizwirtualnapolska.logic.PercentageCalculator;
 import com.trzewik.quizwirtualnapolska.logic.RateMessageProvider;
 
+import static com.trzewik.quizwirtualnapolska.properties.QuizResultActivityProperties.ANSWERS_TEX;
+import static com.trzewik.quizwirtualnapolska.properties.QuizResultActivityProperties.QUIZ_LIST_BUTTON_TEXT;
+import static com.trzewik.quizwirtualnapolska.properties.QuizResultActivityProperties.TRY_AGAIN_BUTTON_TEXT;
+import static com.trzewik.quizwirtualnapolska.properties.QuizResultActivityProperties.UNDER_TITLE_TEXT;
+
 public class QuizResultActivity extends AppCompatActivity {
-    private static String UNDER_TITLE_TEXT = "Odpowiedziałeś na:";
-    private static String ANSWERS_TEX = "pytań";
-    private static String QUIZ_LIST_BUTTON_TEXT = "Przejdź do listy quizów";
-    private static String TRY_AGAIN_BUTTON_TEXT = "Rozwiąż jeszcze raz";
+    private long lastClickTime = 0;
+
     private TextView rateMessage;
     private TextView underTitle;
     private TextView percentage;
@@ -99,6 +103,7 @@ public class QuizResultActivity extends AppCompatActivity {
                 tryAgain.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        preventDoubleClick();
                         Intent intent = new Intent(QuizResultActivity.this, QuizQuestionActivity.class);
                         intent.putExtras(getIntent().getExtras());
                         databaseController.clearQuizAnswers(getId());
@@ -118,6 +123,7 @@ public class QuizResultActivity extends AppCompatActivity {
                 quizList.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        preventDoubleClick();
                         Intent intent = new Intent(QuizResultActivity.this, QuizListActivity.class);
                         startActivity(intent);
                         finish();
@@ -131,5 +137,12 @@ public class QuizResultActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         assert bundle != null;
         return bundle.getLong("id");
+    }
+
+    private void preventDoubleClick() {
+        if (SystemClock.elapsedRealtime() - lastClickTime < 1000) {
+            return;
+        }
+        lastClickTime = SystemClock.elapsedRealtime();
     }
 }

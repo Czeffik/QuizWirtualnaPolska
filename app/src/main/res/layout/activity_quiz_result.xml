@@ -93,7 +93,7 @@
     <Space
         android:id="@+id/spaceUnderAnswers"
         android:layout_width="0dp"
-        android:layout_height="30dp"
+        android:layout_height="50dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -101,17 +101,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/answersText" />
 
-    <Button
-        android:id="@+id/quizList"
+    <Space
+        android:id="@+id/spaceBetweenButtons"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="20dp"
         android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tryAgain"
+        app:layout_constraintStart_toEndOf="@+id/quizList"
+        app:layout_constraintTop_toBottomOf="@+id/spaceUnderAnswers" />
+
+    <Button
+        android:id="@+id/quizList"
+        android:layout_width="130dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@android:color/holo_red_dark"
         android:textAlignment="center"
         android:textColor="@android:color/white"
-        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -119,31 +130,17 @@
 
     <Button
         android:id="@+id/tryAgain"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="130dp"
+        android:layout_height="70dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
-        android:background="@color/colorPrimary"
+        android:background="@android:color/holo_red_dark"
         android:textAlignment="center"
         android:textColor="@android:color/white"
-        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spaceUnderAnswers"
-        android:layout_marginRight="8dp" />
+        app:layout_constraintTop_toBottomOf="@+id/spaceUnderAnswers" />
 
-    <Space
-        android:id="@+id/spaceBetweenButtons"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:foregroundGravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tryAgain"
-        app:layout_constraintStart_toEndOf="@+id/quizList"
-        app:layout_constraintTop_toBottomOf="@+id/spaceUnderAnswers"
-        android:layout_marginRight="8dp" />
 </android.support.constraint.ConstraintLayout>

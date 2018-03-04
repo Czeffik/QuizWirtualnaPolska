@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,6 +25,7 @@ import com.trzewik.quizwirtualnapolska.model.quizDetails.enums.QuestionType;
 import java.util.List;
 
 public class QuizQuestionActivity extends AppCompatActivity {
+    private long lastClickTime = 0;
     private ListView listView;
     private TextView questionView;
     private TextView titleView;
@@ -96,6 +98,7 @@ public class QuizQuestionActivity extends AppCompatActivity {
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        preventDoubleClick();
                         new QuestionAnswerChecker().setQuestionAnswer(questionAnswers.get(i));
                         populateView();
 
@@ -121,6 +124,13 @@ public class QuizQuestionActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         assert bundle != null;
         return bundle.getLong("id");
+    }
+
+    private void preventDoubleClick() {
+        if (SystemClock.elapsedRealtime() - lastClickTime < 1000) {
+            return;
+        }
+        lastClickTime = SystemClock.elapsedRealtime();
     }
 
 }

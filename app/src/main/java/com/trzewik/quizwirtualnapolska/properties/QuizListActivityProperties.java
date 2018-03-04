@@ -1,4 +1,4 @@
-package com.trzewik.quizwirtualnapolska.stringProviders;
+package com.trzewik.quizwirtualnapolska.properties;
 
 public class QuizListActivityProperties {
     public static String information = "Informacja";

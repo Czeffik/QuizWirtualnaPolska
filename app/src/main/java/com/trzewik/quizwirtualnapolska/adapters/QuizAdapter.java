@@ -17,8 +17,8 @@ import com.trzewik.quizwirtualnapolska.logic.PercentageCalculator;
 
 import java.util.List;
 
-import static com.trzewik.quizwirtualnapolska.stringProviders.QuizListActivityProperties.lastResult;
-import static com.trzewik.quizwirtualnapolska.stringProviders.QuizListActivityProperties.quizCompletedIn;
+import static com.trzewik.quizwirtualnapolska.properties.QuizListActivityProperties.lastResult;
+import static com.trzewik.quizwirtualnapolska.properties.QuizListActivityProperties.quizCompletedIn;
 
 
 public class QuizAdapter extends ArrayAdapter<Quiz> {
