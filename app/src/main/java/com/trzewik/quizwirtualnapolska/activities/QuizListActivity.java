@@ -11,22 +11,24 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.trzewik.quizwirtualnapolska.App;
 import com.trzewik.quizwirtualnapolska.R;
 import com.trzewik.quizwirtualnapolska.adapters.QuizAdapter;
 import com.trzewik.quizwirtualnapolska.db.entity.Quiz;
-import com.trzewik.quizwirtualnapolska.logic.DataRetriever;
+import com.trzewik.quizwirtualnapolska.logic.DataGainer;
 import com.trzewik.quizwirtualnapolska.logic.DatabaseController;
 
 import java.util.List;
 
 public class QuizListActivity extends AppCompatActivity {
     private static int START_INDEX = 0;
-    private static int MAX_RESULT = 10;
+    private static int MAX_RESULT = 5;
 
     private ListView listView;
+    private Button button;
     private DatabaseController databaseController = new DatabaseController();
 
     @Override
@@ -34,6 +36,7 @@ public class QuizListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_list);
         listView = findViewById(R.id.list);
+        button = findViewById(R.id.button);
 
         if (isOnline() || databaseController.getNumberOfQuizzes() > 0) {
             insertAndDisplayData(START_INDEX, MAX_RESULT);
@@ -54,7 +57,7 @@ public class QuizListActivity extends AppCompatActivity {
             public void run() {
                 List<Quiz> quizzes = databaseController.getAllQuizzes();
                 if (App.get().isForceUpdate() || quizzes.isEmpty()) {
-                    new DataRetriever(getApplicationInfo().dataDir, startIndex, maxResult).retrieveData();
+                    new DataGainer().retrieveData(getApplicationInfo().dataDir, startIndex, maxResult);
                     populateQuizList();
                 } else {
                     populateQuizList();
@@ -80,8 +83,23 @@ public class QuizListActivity extends AppCompatActivity {
 
                     }
                 });
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        fetchExtraQuizzes();
+                    }
+                });
             }
         });
+    }
+
+    private void fetchExtraQuizzes(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                new DataGainer().fetchNewQuizzes(getApplicationInfo().dataDir, MAX_RESULT);
+            }
+        }).start();
     }
 
 

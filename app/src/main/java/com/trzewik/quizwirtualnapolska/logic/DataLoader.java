@@ -32,8 +32,22 @@ public class DataLoader {
     private DatabaseController databaseController = new DatabaseController();
     private ApiClient apiClient = new ApiClient();
 
-    public void retrieveData(final String appDirectory, int startIndex, int numberOfAvailableCores) {
+    public void fetchAdditionalQuizzes(String appDirectory, int startIndex, int numberOfAvailableCores) {
         List<QuizItem> quizItems = apiClient.getQuizzes(startIndex, numberOfAvailableCores).getQuizItems();
+        for (int i = 0; i < quizItems.size(); i++) {
+            if (databaseController.getQuizById(quizItems.get(i).getId()) != null) {
+                quizItems.remove(i);
+            }
+        }
+        fetchQuizzesQuizDetailsAndQuizAnswers(appDirectory, quizItems, quizItems.size());
+    }
+
+    public void fetchData(String appDirectory, int startIndex, int numberOfAvailableCores) {
+        List<QuizItem> quizItems = apiClient.getQuizzes(startIndex, numberOfAvailableCores).getQuizItems();
+        fetchQuizzesQuizDetailsAndQuizAnswers(appDirectory, quizItems, numberOfAvailableCores);
+    }
+
+    private void fetchQuizzesQuizDetailsAndQuizAnswers(final String appDirectory, List<QuizItem> quizItems, int numberOfAvailableCores) {
         final List<Quiz> quizzes = new ArrayList<>();
         for (final QuizItem quizItem : quizItems) {
             new Thread(new Runnable() {
